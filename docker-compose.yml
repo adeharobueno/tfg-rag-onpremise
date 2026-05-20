@@ -15,6 +15,8 @@ services:
     volumes:
       # Mapeo físico al volumen sdb (100 GB) optimizado para el motor de datos
       - ${LOCAL_PGDATA_DIR}/postgres_data:/var/lib/postgresql/data
+      # NUEVO: Inyección automatizada de scripts de inicialización de la base de datos
+      - ./database:/docker-entrypoint-initdb.d
     command: >
       postgres
       -c shared_buffers=${PG_SHARED_BUFFERS}
@@ -22,7 +24,7 @@ services:
       -c work_mem=${PG_WORK_MEM}
       -c maintenance_work_mem=${PG_MAINTENANCE_WORK_MEM}
       -c random_page_cost=${PG_RANDOM_PAGE_COST}
-      -c sequential_page_cost=${PG_SEQUENTIAL_PAGE_COST}
+      -c seq_page_cost=${PG_SEQUENTIAL_PAGE_COST}
       -c effective_io_concurrency=${PG_EFFECTIVE_IO_CONCURRENCY}
       -c synchronous_commit=${PG_SYNCHRONOUS_COMMIT}
     networks:

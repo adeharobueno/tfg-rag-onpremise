@@ -5,7 +5,7 @@
 -- =============================================================================
 
 -- 1. EXTENSIONES DE SEGURIDAD Y SOPORTE VECTORIAL
-CREATE EXTENSION IF NOT EXISTS pgvector;
+CREATE EXTENSION IF NOT EXISTS vector;
 CREATE EXTENSION IF NOT EXISTS pgcrypto; -- Habilita hashing seguro (Blowfish/Bcrypt) dentro de Postgres
 
 -- 2. LIMPIEZA DE ENTORNOS PREVIOS (Garantía de idempotencia en despliegues)

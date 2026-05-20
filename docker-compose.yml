@@ -1,0 +1,98 @@
+services:
+  # ============================================================================
+  # MOTOR DE BASE DE DATOS RELACIONAL-VECTORIAL (POSTGRESQL + PGVECTOR)
+  # ============================================================================
+  postgres_db:
+    image: pgvector/pgvector:pg16  # Imagen oficial con PostgreSQL 16 y pgvector preinstalado
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      # Mapeo físico al volumen sdb (100 GB) optimizado para el motor de datos
+      - ${LOCAL_PGDATA_DIR}/postgres_data:/var/lib/postgresql/data
+    command: >
+      postgres
+      -c shared_buffers=${PG_SHARED_BUFFERS}
+      -c effective_cache_size=${PG_EFFECTIVE_CACHE_SIZE}
+      -c work_mem=${PG_WORK_MEM}
+      -c maintenance_work_mem=${PG_MAINTENANCE_WORK_MEM}
+      -c random_page_cost=${PG_RANDOM_PAGE_COST}
+      -c sequential_page_cost=${PG_SEQUENTIAL_PAGE_COST}
+      -c effective_io_concurrency=${PG_EFFECTIVE_IO_CONCURRENCY}
+      -c synchronous_commit=${PG_SYNCHRONOUS_COMMIT}
+    networks:
+      - rag_network
+
+  # ============================================================================
+  # MOTOR DE INFERENCIA LOCAL (OLLAMA ENGINE)
+  # ============================================================================
+  ollama_engine:
+    image: ollama/ollama:latest
+    container_name: ollama_engine
+    restart: always
+    ports:
+      - "11434:11434"
+    volumes:
+      # Mapeo físico al volumen sda (150 GB) reservado para modelos pesados (Llama 3.1)
+      - ${LOCAL_OLLAMA_DIR}/ollama_models:/root/.ollama
+    environment:
+      - OLLAMA_NUM_PARALLEL=2  # Permite procesar consultas en paralelo aprovechando los hilos del Xeon
+    networks:
+      - rag_network
+
+  # ============================================================================
+  # PIPELINE DE INGESTA Y ETL AUTOMATIZADA (N8N)
+  # ============================================================================
+  ollama_n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: n8n_automation
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+      - N8N_USER_MANAGEMENT_DISABLED=${N8N_USER_MANAGEMENT_DISABLED}
+      - N8N_BASIC_AUTH_ACTIVE=${N8N_BASIC_AUTH_ACTIVE}
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD}
+    volumes:
+      # Almacenamiento local de n8n persistido en la raíz de datos (sdb)
+      - ${LOCAL_PGDATA_DIR}/n8n_data:/home/node/.n8n
+    depends_on:
+      - postgres_db
+    networks:
+      - rag_network
+
+  # ============================================================================
+  # CAPA DE INTERMEDIACIÓN Y AUTENTICACIÓN JWT (FASTAPI BACKEND)
+  # ============================================================================
+  api_backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: api_backend
+    restart: always
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - postgres_db
+      - ollama_engine
+    networks:
+      - rag_network
+
+# ==============================================================================
+# DEFINICIÓN DE REDES CONFINADAS (AISLAMIENTO SOBERANO)
+# ==============================================================================
+networks:
+  rag_network:
+    driver: bridge
+    internal: false # Desactivar o restringir según la política estricta de red local

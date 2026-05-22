@@ -30,18 +30,30 @@ INSERT INTO users (username, password_hash, department, user_role) VALUES
 ('tecnico_admin', crypt('StandardPassword2026', gen_salt('bf', 10)), 'Administración', 'dept_standard');
 
 -- 4. TABLA DE FRAGMENTOS DE DOCUMENTOS (Estructura RAG - Capítulos 2 y 4)
+
 CREATE TABLE document_sections (
     section_id BIGSERIAL PRIMARY KEY,
-    document_hash CHAR(64) NOT NULL,          -- Identificador SHA-256 para control de deduplicación
-    filename VARCHAR(255) NOT NULL,            -- Nombre del archivo de origen (PDF, DOCX, TXT)
-    department VARCHAR(50) NOT NULL,          -- Departamento propietario del dato ('Recursos Humanos'/'Administración')
-    confidentiality_level VARCHAR(20) NOT NULL, -- Niveles inmutables: 'Público', 'Interno', 'Confidencial'
-    chunk_index INT NOT NULL,                  -- Índice secuencial del fragmento dentro del documento
-    content TEXT NOT NULL,                     -- Texto claro extraído de un tamaño de ~650 tokens
-    -- COLUMNA VECTORIAL CORREGIDA A EXACTAMENTE 768 DIMENSIONES
-    embedding vector(768),                     
+    
+    -- OBLIGATORIAS PARA LANGCHAIN / n8n
+    text TEXT NOT NULL,                               
+    embedding vector(768),
+    metadata JSONB,                                   -- n8n inyectará aquí dentro: {"file_name": "...", "path": "..."}
+
+    -- COLUMNAS DE CONTROL AUTOMATIZADAS (Modificadas para compatibilidad)
+    filename VARCHAR(255) GENERATED ALWAYS AS (metadata->>'file_name') STORED, 
+    chunk_index INT,                                  -- Permitir NULL o extraer de metadata si n8n lo añade
+    
+    -- CONTROL DE AUDITORÍA Y SEGURIDAD RLS (Permitimos NULL inicialmente para que n8n inserte)
+    document_hash CHAR(64),                           
+    department VARCHAR(50),                           
+    confidentiality_level VARCHAR(20),                
+    
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Índices GIN y Vectoriales esenciales para el rendimiento del RAG
+CREATE INDEX IF NOT EXISTS idx_document_sections_metadata ON document_sections USING GIN (metadata);
+CREATE INDEX IF NOT EXISTS idx_document_sections_embedding ON document_sections USING hnsw (embedding vector_cosine_ops);
 
 -- 5. CONFIGURACIÓN COMPLEMENTARIA DE SEGURIDAD RELACIONAL
 -- Otorgar privilegios mínimos de estructura para evitar el uso del superusuario en el backend de FastAPI

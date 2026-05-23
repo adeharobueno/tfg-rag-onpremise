@@ -9,15 +9,15 @@ async def get_db_connection():
     await register_vector(conn)
     return conn
 
-# Eliminamos el obsoleto 'clearance' de la firma
 async def search_vectors_with_rls(conn, embedding: list[float], dept: str, role: str, limit: int = 3):
     async with conn.transaction():
-        # Inyectamos estrictamente las dos variables que tu 02_rls.sql necesita
+        # Configuración segura de variables de entorno de transacción (GUC)
         await conn.execute("SELECT set_config('app.current_user_dept', $1, true);", dept)
         await conn.execute("SELECT set_config('app.current_user_role', $1, true);", role)
         
+        # Recuperamos explícitamente el campo 'metadata' (JSONB) y 'confidentiality_level'
         query = """
-            SELECT section_id, text, filename, confidentiality_level, (embedding <=> $1) AS distance
+            SELECT section_id, text, metadata, confidentiality_level, (embedding <=> $1) AS distance
             FROM document_sections
             ORDER BY embedding <=> $1 LIMIT $2;
         """

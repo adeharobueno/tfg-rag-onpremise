@@ -27,32 +27,30 @@ GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO api_gateway;
 ALTER TABLE document_sections ENABLE ROW LEVEL SECURITY;
 ALTER TABLE document_sections FORCE ROW LEVEL SECURITY;
 
+-- 3. POLÍTICAS DE CONTROL DE ACCESO DESACOPLADAS
+-- Ingesta (Permitir Inserción)
+CREATE POLICY rls_policy_insert ON document_sections FOR INSERT TO api_gateway WITH CHECK (true);
 
--- 3. POLÍTICAS DE CONTROL DE ACCESO DESACOPLADAS (Lectura vs Escritura)
+-- Limpieza para Tests (Permitir Borrado)
+CREATE POLICY rls_policy_delete ON document_sections FOR DELETE TO api_gateway USING (true);
 
--- 3.1. POLÍTICA DE INGESTA (ETL n8n): Permite la inserción libre de fragmentos en segundo plano
-CREATE POLICY rls_policy_insert ON document_sections
-    FOR INSERT
-    TO api_gateway
-    WITH CHECK (true);
-
--- 3.2. POLÍTICA DE CONSULTA MULTIFACTORIAL (API FastAPI): Exige validación JWT transaccional
+-- Consulta Multifactorial (El Cortafuegos Semántico)
 CREATE POLICY rls_policy_select ON document_sections
     FOR SELECT
     TO api_gateway
     USING (
-        -- Regla Alfa: El rol 'admin' (Director de IA) puentea cualquier restricción sectorial
+        -- Regla Alfa: El rol 'admin' puentea cualquier restricción
         current_setting('app.current_user_role', true) = 'admin'
         OR
         (
-            -- Regla Beta: Coherencia estricta de Departamento (Aislamiento Sectorial)
+            -- Regla Beta: Aislamiento Sectorial
             department = current_setting('app.current_user_dept', true)
             AND
-            -- Regla Gamma: Evaluación Jerárquica del Nivel de Confidencialidad
+            -- Regla Gamma: Jerarquía de Confidencialidad
             CASE
                 WHEN confidentiality_level = 'Público' THEN true
-                WHEN confidentiality_level = 'Interno' THEN current_setting('app.current_user_role', true) IN ('dept_high', 'dept_standard')
-                WHEN confidentiality_level = 'Confidencial' THEN current_setting('app.current_user_role', true) = 'dept_high'
+                WHEN confidentiality_level = 'Interno' THEN current_setting('app.current_user_role', true) IN ('employee', 'manager')
+                WHEN confidentiality_level = 'Confidencial' THEN current_setting('app.current_user_role', true) = 'manager'
                 ELSE false
             END
         )

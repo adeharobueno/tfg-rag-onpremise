@@ -29,6 +29,11 @@ services:
       -c synchronous_commit=${PG_SYNCHRONOUS_COMMIT}
     networks:
       - rag_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U api_gateway -d tfg_rag_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   # ============================================================================
   # MOTOR DE INFERENCIA LOCAL (OLLAMA ENGINE)
@@ -78,23 +83,21 @@ services:
   # ============================================================================
   # CAPA DE INTERMEDIACIÓN Y AUTENTICACIÓN JWT (FASTAPI BACKEND)
   # ============================================================================
-  api_backend:
+  api_gateway:
     build:
-      context: ./backend
+      context: ./api
       dockerfile: Dockerfile
-    container_name: api_backend
+    container_name: api_gateway_container
     restart: always
     ports:
       - "8000:8000"
-    env_file:
-      - .env
-    volumes:
-      - ./backend:/app
-    depends_on:
-      - postgres_db
-      - ollama_engine
+    environment:
+      - DATABASE_URL=postgresql://api_gateway:App_Pass_Gateway_Secure_2026%3F@postgres_db:5432/tfg_rag_db
     networks:
       - rag_network
+    depends_on:
+      postgres_db:
+        condition: service_healthy
 
 # ==============================================================================
 # DEFINICIÓN DE REDES CONFINADAS (AISLAMIENTO SOBERANO)

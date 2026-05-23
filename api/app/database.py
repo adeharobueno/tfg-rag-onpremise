@@ -1,25 +1,24 @@
 import asyncpg
 import os
+from pgvector.asyncpg import register_vector
 
-DB_DSN = os.getenv("DATABASE_URL", "postgresql://api_gateway:App_Pass_Gateway_Secure_2026?@postgres_db:5432/tfg_rag_db")
+DB_DSN = os.getenv("DATABASE_URL", "postgresql://api_gateway:App_Pass_Gateway_Secure_2026%3F@postgres_db:5432/tfg_rag_db")
 
 async def get_db_connection():
-    return await asyncpg.connect(DB_DSN)
+    conn = await asyncpg.connect(DB_DSN)
+    await register_vector(conn)
+    return conn
 
-async def search_vectors_with_rls(conn, embedding: list[float], dept: str, clearance: str, role: str, limit: int = 3):
-    # Abrimos una transacción estricta
+# Eliminamos el obsoleto 'clearance' de la firma
+async def search_vectors_with_rls(conn, embedding: list[float], dept: str, role: str, limit: int = 3):
     async with conn.transaction():
-        # Inyección de variables GUC transaccionales para el cortafuegos RLS
-        await conn.execute("SET LOCAL app.current_user_dept = $1;", dept)
-        await conn.execute("SET LOCAL app.current_user_role = $2;", role)
-        await conn.execute("SET LOCAL request.jwt.claim.department = $1;", dept)
-        await conn.execute("SET LOCAL request.jwt.claim.clearance = $3;", clearance)
+        # Inyectamos estrictamente las dos variables que tu 02_rls.sql necesita
+        await conn.execute("SELECT set_config('app.current_user_dept', $1, true);", dept)
+        await conn.execute("SELECT set_config('app.current_user_role', $1, true);", role)
         
-        # Consulta de similitud del coseno utilizando el operador <=> de pgvector
         query = """
             SELECT section_id, text, filename, confidentiality_level, (embedding <=> $1) AS distance
             FROM document_sections
-            ORDER BY embedding <=> $1
-            LIMIT $2;
+            ORDER BY embedding <=> $1 LIMIT $2;
         """
         return await conn.fetch(query, embedding, limit)

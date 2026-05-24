@@ -99,6 +99,19 @@ services:
       postgres_db:
         condition: service_healthy
 
+   # ============================================================================
+   # CAPA DE EVALUADOR ASÍNCRONO (AUDIT_WORKER)
+   # ============================================================================
+  audit_worker:
+    build: ./audit_worker
+    container_name: audit_worker
+    depends_on:
+      - postgres_db
+      - ollama_engine
+    networks:
+      - rag_network
+    restart: unless-stopped
+
 # ==============================================================================
 # DEFINICIÓN DE REDES CONFINADAS (AISLAMIENTO SOBERANO)
 # ==============================================================================

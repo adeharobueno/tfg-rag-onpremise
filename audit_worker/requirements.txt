@@ -1,0 +1,4 @@
+trulens-eval
+asyncpg
+requests
+pydantic

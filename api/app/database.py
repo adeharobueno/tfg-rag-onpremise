@@ -22,3 +22,13 @@ async def search_vectors_with_rls(conn, embedding: list[float], dept: str, role:
             ORDER BY embedding <=> $1 LIMIT $2;
         """
         return await conn.fetch(query, embedding, limit)
+
+DB_DSN_ADMIN = os.getenv(
+    "DATABASE_URL_ADMIN", 
+    "postgresql://postgres:Sub_Secret_Pass_Admin_2026!@postgres_db:5432/tfg_rag_db"
+)
+
+async def get_db_connection_admin():
+    conn = await asyncpg.connect(DB_DSN_ADMIN)
+    await register_vector(conn)
+    return conn

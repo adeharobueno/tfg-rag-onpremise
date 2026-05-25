@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException, Header, BackgroundTasks
 from fastapi.responses import StreamingResponse
-from app.database import get_db_connection, search_vectors_with_rls
+from app.database import get_db_connection, get_db_connection_admin, search_vectors_with_rls
 from pydantic import BaseModel
 import requests, jwt, json
 
@@ -59,10 +59,9 @@ async def rag_chat_stream(request: QueryRequest, background_tasks: BackgroundTas
     chunks_id = [r['section_id'] for r in results]
     context_text = "\n".join([f'<documento fuente="{sources[i]["file_name"]}" seguridad="{sources[i]["security"]}">\n{r["text"]}\n</documento>' for i, r in enumerate(results)])
 
-    # Variable mutable para poder extraer el texto desde el generador síncrono
     full_response_accumulator = [""]
 
-    # 4. Generador SSE (Streaming Síncrono)
+    # 4. Generador SSE
     def event_generator():
         yield f"event: metadata\ndata: {json.dumps(sources)}\n\n"
         
@@ -76,7 +75,7 @@ async def rag_chat_stream(request: QueryRequest, background_tasks: BackgroundTas
                 {"role": "user", "content": f"<contexto>\n{context_text}\n</contexto>\n\nPregunta: {request.question}"}
             ],
             "stream": True,
-            "options": {"temperature": 0.0, "top_p": 0.1, "num_ctx": 4096}
+            "options": {"temperature": 0.0, "top_p": 0.1, "num_ctx": 4096, "num_predict": 512}
         }
         
         with requests.post(ollama_chat_url, json=chat_payload, stream=True) as response:
@@ -90,8 +89,7 @@ async def rag_chat_stream(request: QueryRequest, background_tasks: BackgroundTas
         
         yield "event: done\ndata: {}\n\n"
 
-    # 5. Tarea en Segundo Plano (Audit Trail)
-    # Esta función asíncrona es gestionada por el loop principal de FastAPI *después* del stream
+    # 5. Audit Trail en Background
     async def save_log_task():
         try:
             write_conn = await get_db_connection()
@@ -107,7 +105,44 @@ async def rag_chat_stream(request: QueryRequest, background_tasks: BackgroundTas
         except Exception as e:
             print(f"Error de auditoría: {e}")
 
-    # Delegamos la tarea de base de datos a FastAPI
     background_tasks.add_task(save_log_task)
 
     return StreamingResponse(event_generator(), media_type="text/event-stream")
+
+
+@app.get("/api/v1/document/exists/{document_hash}")
+async def check_document_hash(document_hash: str):
+    """
+    Comprueba si un documento con el hash SHA-256 dado ya existe en la BD.
+    Utilizado por el pipeline de ingesta de n8n para deduplicación.
+    Usa conexión de superusuario para bypass de RLS en consulta administrativa interna.
+    """
+    conn = await get_db_connection_admin()
+    try:
+        result = await conn.fetchval(
+            "SELECT COUNT(*) FROM document_sections WHERE document_hash = $1",
+            document_hash
+        )
+        return {"exists": result > 0, "hash": document_hash}
+    finally:
+        await conn.close()
+
+@app.delete("/api/v1/document/{filename}")
+async def delete_document_chunks(filename: str, token_data: dict = Depends(verify_jwt_token)):
+    """
+    Elimina todos los chunks de un documento por nombre de fichero.
+    Utilizado por el pipeline de n8n antes de reingestar una versión actualizada.
+    Solo accesible para el rol admin.
+    """
+    if token_data.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Operación restringida al rol admin")
+    
+    conn = await get_db_connection()
+    try:
+        await conn.execute(
+            "DELETE FROM document_sections WHERE filename = $1",
+            filename
+        )
+        return {"deleted": True, "filename": filename}
+    finally:
+        await conn.close()

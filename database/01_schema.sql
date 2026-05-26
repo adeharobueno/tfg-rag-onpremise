@@ -33,24 +33,18 @@ INSERT INTO users (username, password_hash, department, user_role) VALUES
 
 CREATE TABLE document_sections (
     section_id BIGSERIAL PRIMARY KEY,
-    
-    -- OBLIGATORIAS PARA LANGCHAIN / n8n
-    text TEXT NOT NULL,                               
+    document_hash CHAR(64),
+    filename VARCHAR(255) GENERATED ALWAYS AS (metadata->>'file_name') STORED,
+    department VARCHAR(50),
+    confidentiality_level VARCHAR(20),
+    chunk_index INT,
+    content TEXT NOT NULL,
+    text TEXT NOT NULL,
     embedding vector(768),
-    metadata JSONB,                                   -- n8n inyectará aquí dentro: {"file_name": "...", "path": "..."}
-
-    -- COLUMNAS DE CONTROL AUTOMATIZADAS (Modificadas para compatibilidad)
-    filename VARCHAR(255) GENERATED ALWAYS AS (metadata->>'file_name') STORED, 
-    chunk_index INT,                                  -- Permitir NULL o extraer de metadata si n8n lo añade
-    
-    -- CONTROL DE AUDITORÍA Y SEGURIDAD RLS (Permitimos NULL inicialmente para que n8n inserte)
-    document_hash CHAR(64),                           
-    department VARCHAR(50),                           
-    confidentiality_level VARCHAR(20),                
-    
+    metadata JSONB,
+    valid_until TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
-
 -- Índices GIN y Vectoriales esenciales para el rendimiento del RAG
 CREATE INDEX IF NOT EXISTS idx_document_sections_metadata ON document_sections USING GIN (metadata);
 CREATE INDEX IF NOT EXISTS idx_document_sections_embedding ON document_sections USING hnsw (embedding vector_cosine_ops);

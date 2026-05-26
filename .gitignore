@@ -32,3 +32,6 @@ ollama_local/
 Thumbs.db
 .idea/
 .vscode/
+documents/
+.docker-compose.yml.swp
+a.txt

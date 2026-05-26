@@ -56,20 +56,31 @@ services:
   # PIPELINE DE INGESTA Y ETL AUTOMATIZADA (N8N)
   # ============================================================================
   ollama_n8n:
-    image: docker.n8n.io/n8nio/n8n:latest
+    build: .
     container_name: n8n_automation
     restart: always
     ports:
       - "5678:5678"
     environment:
+      - NODE_FUNCTION_ALLOW_EXTERNAL=pdf-parse
       - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
       - N8N_USER_MANAGEMENT_DISABLED=${N8N_USER_MANAGEMENT_DISABLED}
       - N8N_BASIC_AUTH_ACTIVE=${N8N_BASIC_AUTH_ACTIVE}
       - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER}
       - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD}
       - N8N_RESTRICT_FILE_ACCESS_TO=/data/documents;/home/node/.n8n-files
-      - N8N_ENABLE_COMMAND_EXECUTION=true
       - NODES_EXCLUDE=[]
+      - N8N_RUNNERS_ENABLED=true
+      - N8N_RUNNERS_MODE=internal
+      - N8N_RUNNERS_TASK_TIMEOUT=300
+      - N8N_RUNNERS_MAX_CONCURRENCY=20
+      - N8N_RUNNERS_TASK_BROKER_TIMEOUT=300
+      - NODE_PATH=/usr/local/lib/node_modules:/home/node/node_modules
+      - NODE_OPTIONS=--stack-trace-limit=50
+      - N8N_LOG_LEVEL=debug
+
+
+
     volumes:
       # Almacenamiento local de n8n persistido en la raíz de datos (sdb)
       - ${LOCAL_PGDATA_DIR}/n8n_data:/home/node/.n8n
@@ -108,6 +119,20 @@ services:
     depends_on:
       - postgres_db
       - ollama_engine
+    networks:
+      - rag_network
+    restart: unless-stopped
+
+  # ============================================================================
+  # CLIENTE WEB (STREAMLIT)
+  # ============================================================================ 
+  streamlit_gui:
+    build: ./streamlit_gui
+    container_name: streamlit_gui
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api_gateway
     networks:
       - rag_network
     restart: unless-stopped

@@ -1,0 +1,142 @@
+============================================================
+GOLDEN SET DE EVALUACIÓN RAG — Tue May 26 04:38:21 PM UTC 2026
+============================================================
+
+BLOQUE A — Administración / dept_standard
+============================================================
+
+------------------------------------------------------------
+[GS-01] ¿Cuál es la cuantía máxima autorizada para alojamiento en viajes?
+Rol: dept_standard | Dpto: Administración
+------------------------------------------------------------
+Respuesta: Según el archivo documentos_ADM_02_Guia_Dietas.docx, no se proporciona información sobre una cuantía máxima autorizada para alojamiento en viajes. La guía de procedimientos solo regula el procedimiento ordinario para la devolución de gastos de viaje y dietas derivados de la asistencia a congresos internacionales de Inteligencia Artificial y Ciberseguridad, pero no establece
+Esperado:  110 EUR por noche
+
+------------------------------------------------------------
+[GS-02] ¿Cuál es la dieta máxima diaria para viajes internacionales?
+Rol: dept_standard | Dpto: Administración
+------------------------------------------------------------
+Respuesta: Según el archivo documentos_ADM_02_Guia_Dietas.docx, trata sobre la Guía de Procedimientos para la Solicitud de Dietas. La dieta máxima diaria para viajes internacionales es de 75 EUR.
+Esperado:  75 EUR
+
+------------------------------------------------------------
+[GS-03] ¿Cuántos días de antelación mínima se requieren para solicitar vacaciones?
+Rol: dept_standard | Dpto: Administración
+------------------------------------------------------------
+Respuesta: Según el archivo documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt, trata sobre que las solicitudes de vacaciones deben presentarse con un mínimo de 15 días de antelación.
+Esperado:  15 días de antelación
+
+------------------------------------------------------------
+[GS-04] ¿Cuál es el periodo mínimo de días consecutivos en vacaciones fraccionadas?
+Rol: dept_standard | Dpto: Administración
+------------------------------------------------------------
+Respuesta: Según el archivo documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt, trata sobre que el empleado podrá fraccionar sus vacaciones en un máximo de 3 periodos, siendo el periodo mínimo de 5 días laborables consecutivos.
+Esperado:  5 días laborables consecutivos
+
+BLOQUE B — Administración / dept_high
+============================================================
+
+------------------------------------------------------------
+[GS-05] ¿Cuál es el valor de los activos corrientes en el cierre Q1 2026?
+Rol: dept_high | Dpto: Administración
+------------------------------------------------------------
+Respuesta: Según el archivo documentos_ADM_06_Balance_Contable.pdf, trata sobre que los activos corrientes en el cierre Q1 2026 ascienden a 450.000 EUR.
+Esperado:  450.000 EUR
+
+------------------------------------------------------------
+[GS-06] ¿Cuánto se ha invertido en proyectos de IA locales?
+Rol: dept_high | Dpto: Administración
+------------------------------------------------------------
+Respuesta: Según el archivo documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf, trata sobre la inversión en infraestructura de Inteligencia Artificial (IA) y su viabilidad financiera a largo plazo. Sin embargo, no se proporciona información específica sobre la cantidad invertida en proyectos de IA locales.
+Esperado:  85.000 EUR
+
+------------------------------------------------------------
+[GS-07] ¿Cuál es el fondo de reserva para contingencias de ciberseguridad?
+Rol: dept_high | Dpto: Administración
+------------------------------------------------------------
+Respuesta: Según el archivo documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf, trata sobre un fondo de inversión plurianual destinado a mitigar la dependencia de proveedores cloud externos y consolidar el modelo de soberanía del dato.
+Esperado:  50.000 EUR
+
+------------------------------------------------------------
+[GS-08] ¿Cuál es el umbral crítico de tiempo de búsqueda vectorial definido en el plan estratégico?
+Rol: dept_high | Dpto: Administración
+------------------------------------------------------------
+Respuesta: Seg
+Esperado:  50 milisegundos por query
+
+BLOQUE C — RRHH / dept_standard
+============================================================
+
+------------------------------------------------------------
+[GS-09] ¿Cuáles son los valores principales de la organización según el manual de bienvenida?
+Rol: dept_standard | Dpto: RRHH
+------------------------------------------------------------
+Respuesta: Según el archivo documentos_RRHH_01_Manual_Bienvenida.docx
+Esperado:  Soberanía del dato, excelencia académica e innovación en IA
+
+------------------------------------------------------------
+[GS-10] ¿A través de qué canal puede un empleado nuevo canalizar sus dudas iniciales?
+Rol: dept_standard | Dpto: RRHH
+------------------------------------------------------------
+Respuesta: Según el archivo documentos_RRHH_01_Manual_Bienvenida.docx, cualquier duda inicial puede canalizarse a través de la oficina virtual de Recursos Humanos o mediante el correo institucional interno administrado en nuestros servidores locales.
+Esperado:  Oficina virtual de RRHH o correo institucional interno
+
+------------------------------------------------------------
+[GS-11] ¿Con qué frecuencia deben entregarse los partes de confirmación durante una baja?
+Rol: dept_standard | Dpto: RRHH
+------------------------------------------------------------
+Respuesta: Según el archivo documentos_RRHH_08_Protocolo_Bajas.txt, trata sobre la gestión de bajas laborales. Los partes de confirmación se entregarán cada 7 días mientras dure la situación de incapacidad temporal.
+Esperado:  Cada 7 días
+
+------------------------------------------------------------
+[GS-12] ¿En qué plazo debe notificarse una baja laboral?
+Rol: dept_standard | Dpto: RRHH
+------------------------------------------------------------
+Respuesta: Según el archivo
+Esperado:  Máximo 24 horas desde la emisión del parte médico
+
+BLOQUE D — RRHH / dept_high
+============================================================
+
+------------------------------------------------------------
+[GS-13] ¿Cuál es la banda salarial de un Investigador Principal?
+Rol: dept_high | Dpto: RRHH
+------------------------------------------------------------
+Respuesta: Según el archivo documentos_RRHH_05_Estructura_Salarial.pdf, trata sobre que la banda salarial bruta anual para un Investigador Principal / Doctor en Informática (Rol: admin) es de 55.000 EUR a 75.000 EUR.
+Esperado:  55.000 EUR - 75.000 EUR
+
+------------------------------------------------------------
+[GS-14] ¿Cuál es la banda salarial de un Ingeniero de Software Senior?
+Rol: dept_high | Dpto: RRHH
+------------------------------------------------------------
+Respuesta: Según el archivo documentos_RRHH_05_Estructura_S
+Esperado:  42.000 EUR - 54.000 EUR
+
+------------------------------------------------------------
+[GS-15] ¿Cuándo se realizan las revisiones salariales?
+Rol: dept_high | Dpto: RRHH
+------------------------------------------------------------
+Respuesta: Según el archivo documentos_RRHH_05_Estructura_Salarial.pdf, las revisiones salariales se realizarán de manera asíncrona cada mes de diciembre considerando las métricas de rendimiento extraídas del sistema analítico local.
+Esperado:  Cada mes de diciembre
+
+------------------------------------------------------------
+[GS-16] ¿A partir de qué día asume la Seguridad Social el pago directo en una baja?
+Rol: dept_high | Dpto: RRHH
+------------------------------------------------------------
+Respuesta: Según el archivo documentos_RRHH_08_Protocolo_Bajas.txt, trata sobre que a partir del día 21, la Seguridad Social asume el pago directo.
+Esperado:  A partir del día 21
+
+BLOQUE E — admin (transversal)
+============================================================
+
+------------------------------------------------------------
+[GS-17] ¿Cuál es la dieta máxima diaria nacional para viajes?
+Rol: admin | Dpto: Administración
+------------------------------------------------------------
+Respuesta: Según el archivo documentos_ADM_02_Guia_Dietas.docx, trata sobre la Guía de Procedimientos para la Solicitud de Dietas. Sin embargo, no se menciona una "dieta máxima diaria nacional" específica en el texto proporcionado.
+Esperado:  45 EUR
+
+------------------------------------------------------------
+[GS-18] ¿Cuál es la banda salarial de un Ingeniero de Datos Junior?
+Rol: admin | Dpto: RRHH
+------------------------------------------------------------

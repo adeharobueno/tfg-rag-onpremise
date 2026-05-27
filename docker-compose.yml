@@ -10,8 +10,6 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - "5432:5432"
     volumes:
       # Mapeo físico al volumen sdb (100 GB) optimizado para el motor de datos
       - ${LOCAL_PGDATA_DIR}/postgres_data:/var/lib/postgresql/data
@@ -42,8 +40,6 @@ services:
     image: ollama/ollama:latest
     container_name: ollama_engine
     restart: always
-    ports:
-      - "11434:11434"
     volumes:
       # Mapeo físico al volumen sda (150 GB) reservado para modelos pesados (Llama 3.1)
       - ${LOCAL_OLLAMA_DIR}/ollama_models:/root/.ollama
@@ -58,9 +54,9 @@ services:
   ollama_n8n:
     build: .
     container_name: n8n_automation
-    restart: always
     ports:
-      - "5678:5678"
+      - "10.239.232.84:5678:5678" 
+    restart: always
     environment:
       - NODE_FUNCTION_ALLOW_EXTERNAL=pdf-parse
       - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
@@ -78,9 +74,7 @@ services:
       - NODE_PATH=/usr/local/lib/node_modules:/home/node/node_modules
       - NODE_OPTIONS=--stack-trace-limit=50
       - N8N_LOG_LEVEL=debug
-
-
-
+      - N8N_SECURE_COOKIE=false
     volumes:
       # Almacenamiento local de n8n persistido en la raíz de datos (sdb)
       - ${LOCAL_PGDATA_DIR}/n8n_data:/home/node/.n8n

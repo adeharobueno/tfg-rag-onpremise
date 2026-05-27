@@ -9,7 +9,7 @@ async def get_db_connection():
     await register_vector(conn)
     return conn
 
-async def search_vectors_with_rls(conn, embedding: list[float], dept: str, role: str, limit: int = 3):
+async def search_vectors_with_rls(conn, embedding: list[float], dept: str, role: str, limit: int = 6):
     async with conn.transaction():
         # Configuración segura de variables de entorno de transacción (GUC)
         await conn.execute("SELECT set_config('app.current_user_dept', $1, true);", dept)

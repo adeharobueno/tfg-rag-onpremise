@@ -1,0 +1,90 @@
+
+[GS-01] Q: ¿Cuál es la cuantía máxima autorizada para alojamiento en viajes?
+[GS-01] R: Según el archivo documentos_ADM_02_Guia_Dietas.docx, no se proporciona información sobre una cuantía máxima autorizada para alojamiento en viajes. La guía de procedimientos solo regula el procedimiento ordinario para la devolución de gastos de viaje y dietas derivados de la asistencia a congresos internacionales de Inteligencia Artificial y Ciberseguridad, pero no establece una cuantía máxima autorizada para alojamiento.
+[GS-01] E: 110 EUR por noche
+
+[GS-02] Q: ¿Cuál es la dieta máxima diaria para viajes internacionales?
+[GS-02] R: Según el archivo documentos_ADM_02_Guia_Dietas.docx, trata sobre la Guía de Procedimientos para la Solicitud de Dietas. La dieta máxima diaria para viajes internacionales es de 75 EUR.
+[GS-02] E: 75 EUR
+
+[GS-03] Q: ¿Cuántos días de antelación mínima se requieren para solicitar vacaciones?
+[GS-03] R: Según el archivo documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt, trata sobre que las solicitudes de vacaciones deben presentarse con un mínimo de 15 días de antelación.
+[GS-03] E: 15 días de antelación
+
+[GS-04] Q: ¿Cuál es el periodo mínimo de días consecutivos en vacaciones fraccionadas?
+[GS-04] R: Según el archivo documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt, trata sobre que el empleado podrá fraccionar sus vacaciones en un máximo de 3 periodos, siendo el periodo mínimo de 5 días laborables consecutivos.
+[GS-04] E: 5 días laborables consecutivos
+
+[GS-05] Q: ¿Cuál es el valor de los activos corrientes en el cierre Q1 2026?
+[GS-05] R: Según el archivo documentos_ADM_06_Balance_Contable.pdf, trata sobre que los activos corrientes en el cierre Q1 2026 ascienden a 450.000 EUR.
+[GS-05] E: 450.000 EUR
+
+[GS-06] Q: ¿Cuánto se ha invertido en proyectos de IA locales?
+[GS-06] R: Según el archivo documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf, trata sobre la inversión en infraestructura de Inteligencia Artificial (IA) y su viabilidad financiera a largo plazo. Sin embargo, no se proporciona información específica sobre la cantidad invertida en proyectos de IA locales.
+[GS-06] E: 85.000 EUR
+
+[GS-07] Q: ¿Cuál es el fondo de reserva para contingencias de ciberseguridad?
+[GS-07] R: Según el archivo documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf, trata sobre un fondo de inversión plurianual destinado a mitigar la dependencia de proveedores cloud externos y consolidar el modelo de soberanía del dato.
+[GS-07] E: 50.000 EUR
+
+[GS-08] Q: ¿Cuál es el umbral crítico de tiempo de búsqueda vectorial definido en el plan estratégico?
+[GS-08] R: Según el archivo documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf, trata sobre el Plan Estratégico de Inversión en Infraestructura IA y Viabilidad Financiera a Largo Plazo (2026-2031) y el umbral crítico de tiempo de búsqueda vectorial es de 50.
+[GS-08] E: 50 milisegundos por query
+
+[GS-09] Q: ¿Cuáles son los valores principales de la organización según el manual de bienvenida?
+[GS-09] R: Según el archivo documentos_RRHH_01_Manual_Bienvenida.docx, trata sobre los siguientes valores:
+
+- Soberanía del dato y privacidad estructural.
+- Excelencia académica y rigor en ingeniería del software.
+- Innovación continua en Inteligencia Artificial y gobernanza.
+[GS-09] E: Soberanía del dato, excelencia académica e innovación en IA
+
+[GS-10] Q: ¿A través de qué canal puede un empleado nuevo canalizar sus dudas iniciales?
+[GS-10] R: Según el archivo documentos_RRHH_01_Manual_Bienvenida.docx, cualquier duda inicial puede canalizarse a través de la oficina virtual de Recursos Humanos o mediante el correo institucional interno administrado en nuestros servidores locales.
+[GS-10] E: Oficina virtual de RRHH o correo institucional interno
+
+[GS-11] Q: ¿Con qué frecuencia deben entregarse los partes de confirmación durante una baja?
+[GS-11] R: Según el archivo documentos_RRHH_08_Protocolo_Bajas.txt, trata sobre la gestión de bajas laborales. Los partes de confirmación se entregarán cada 7 días mientras dure la situación de incapacidad temporal.
+[GS-11] E: Cada 7 días
+
+[GS-12] Q: ¿En qué plazo debe notificarse una baja laboral?
+[GS-12] R: Según el archivo documentos_RRHH_08_Protocolo_Bajas.txt, trata sobre que el empleado debe notificar su baja laboral en un plazo máximo de 24 horas desde la emisión del parte médico.
+[GS-12] E: Máximo 24 horas desde la emisión del parte médico
+
+[GS-13] Q: ¿Cuál es la banda salarial de un Investigador Principal?
+[GS-13] R: Según el archivo documentos_RRHH_05_Estructura_Salarial.pdf, trata sobre que la banda salarial bruta anual para un Investigador Principal / Doctor en Informática (Rol: admin) es de 55.000 EUR a 75.000 EUR.
+[GS-13] E: 55.000 EUR - 75.000 EUR
+
+[GS-14] Q: ¿Cuál es la banda salarial de un Ingeniero de Software Senior?
+[GS-14] R: Según el archivo documentos_RRHH_05_Estructura_Salarial.pdf, trata sobre la banda salarial de un Ingeniero de Software Senior / Especialista RAG (Rol: dept_high), que asciende entre 42.000 EUR y 54.000 EUR.
+[GS-14] E: 42.000 EUR - 54.000 EUR
+
+[GS-15] Q: ¿Cuándo se realizan las revisiones salariales?
+[GS-15] R: Según el archivo documentos_RRHH_05_Estructura_Salarial.pdf, las revisiones salariales se realizarán de manera asíncrona cada mes de diciembre considerando las métricas de rendimiento extraídas del sistema analítico local.
+[GS-15] E: Cada mes de diciembre
+
+[GS-16] Q: ¿A partir de qué día asume la Seguridad Social el pago directo en una baja?
+[GS-16] R: Según el archivo documentos_RRHH_08_Protocolo_Bajas.txt, trata sobre que a partir del día 21, la Seguridad Social asume el pago directo.
+[GS-16] E: A partir del día 21
+
+[GS-17] Q: ¿Cuál es la dieta máxima diaria nacional para viajes?
+[GS-17] R: Según el archivo documentos_ADM_02_Guia_Dietas.docx, trata sobre la Guía de Procedimientos para la Solicitud de Dietas. Sin embargo, no se menciona una "dieta máxima diaria nacional" específica en el texto proporcionado.
+[GS-17] E: 45 EUR
+
+[GS-18] Q: ¿Cuál es la banda salarial de un Ingeniero de Datos Junior?
+[GS-18] R: Según el archivo documentos_RRHH_05_Estructura_Salarial.pdf, no se menciona específicamente la banda salarial para un Ingeniero de Datos Junior. Sin embargo, se mencionan las bandas salariales para los siguientes roles:
+
+* Investigador Principal / Doctor en Informática: 55.000 EUR - 75.000 EUR
+* Ingeniero de Software Senior / Especialista RAG: 42.000 EUR - 54.000 EUR
+
+No hay información sobre la banda salarial para un Ingeniero de Datos Junior.
+[GS-18] E: 28.000 EUR - 38.000 EUR
+
+[GS-19] Q: ¿Qué parámetros HNSW se usan en el índice vectorial según el plan estratégico?
+[GS-19] R: Según el archivo documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf, trata sobre los parámetros m=16 y ef_construction=64 para la calibración del índice HNSW en el procesamiento vectorial.
+[GS-19] E: m=16 y ef_construction=64
+
+[GS-20] Q: ¿Qué porcentaje de la base reguladora abona la empresa entre el día 4 y 20 de una baja?
+[GS-20] R: Según el archivo documentos_RRHH_08_Protocolo_Bajas.txt, trata sobre que la empresa abona el 60% de la base reguladora durante los días 4 al 20 de una baja.
+[GS-20] E: 60% de la base reguladora
+

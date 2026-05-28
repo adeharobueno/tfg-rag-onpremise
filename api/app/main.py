@@ -29,6 +29,16 @@ Pregunta: ¿Sobre qué temas trata el documento recuperado?"""
 FEW_SHOT_ASSISTANT = "Según el archivo recortes_q3.pdf, trata sobre recortes salariales y despidos masivos."
 
 @app.post("/api/v1/chat/stream")
+
+async def _get_active_model(conn) -> str:
+    try:
+        conn_cfg = await get_db_connection_admin()
+        row = await conn_cfg.fetchrow("SELECT value FROM rag_config WHERE key='model'")
+        await conn_cfg.close()
+        return row["value"] if row else "llama3.1:8b"
+    except Exception:
+        return "llama3.1:8b"
+
 async def rag_chat_stream(request: QueryRequest, background_tasks: BackgroundTasks, token_data: dict = Depends(verify_jwt_token)):
     # 1. Vectorización
     ollama_embed_url = "http://ollama_engine:11434/api/embeddings"
@@ -59,6 +69,15 @@ async def rag_chat_stream(request: QueryRequest, background_tasks: BackgroundTas
     chunks_id = [r['section_id'] for r in results]
     context_text = "\n".join([f'<documento fuente="{sources[i]["file_name"]}" seguridad="{sources[i]["security"]}">\n{r["text"]}\n</documento>' for i, r in enumerate(results)])
 
+    # Si no hay chunks relevantes (umbral similitud o RLS filtró todo), respuesta inmediata
+    if not results:
+        async def empty_generator():
+            msg = "No dispongo de información relevante en el repositorio corporativo para responder a esta consulta con el nivel de acceso actual."
+            yield f"event: metadata\ndata: {json.dumps([])}\n\n"
+            yield f"data: {json.dumps({'token': msg})}\n\n"
+            yield "data: {}\n\n"
+        return StreamingResponse(empty_generator(), media_type="text/event-stream")
+
     full_response_accumulator = [""]
 
     # 4. Generador SSE
@@ -67,7 +86,7 @@ async def rag_chat_stream(request: QueryRequest, background_tasks: BackgroundTas
         
         ollama_chat_url = "http://ollama_engine:11434/api/chat"
         chat_payload = {
-            "model": "llama3.1:8b",
+            "model": _active_model_name,
             "messages": [
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": FEW_SHOT_USER},
@@ -144,5 +163,56 @@ async def delete_document_chunks(filename: str, token_data: dict = Depends(verif
             filename
         )
         return {"deleted": True, "filename": filename}
+    finally:
+        await conn.close()
+
+
+# ─── RAG CONFIG ───────────────────────────────
+from pydantic import BaseModel as _BaseModel
+from typing import Optional as _Optional
+
+class ConfigUpdate(_BaseModel):
+    top_k: _Optional[int] = None
+    similarity_threshold: _Optional[float] = None
+    chunk_size: _Optional[int] = None
+    chunk_overlap: _Optional[int] = None
+    model: _Optional[str] = None
+    temperature: _Optional[float] = None
+    num_ctx: _Optional[int] = None
+    num_predict: _Optional[int] = None
+
+@app.get("/api/v1/config")
+async def get_config(payload: dict = Depends(verify_jwt_token)):
+    conn = await get_db_connection_admin()
+    try:
+        rows = await conn.fetch(
+            "SELECT key, value, updated_by, updated_at FROM rag_config ORDER BY key"
+        )
+        return {
+            r["key"]: {
+                "value": r["value"],
+                "updated_by": r["updated_by"],
+                "updated_at": str(r["updated_at"])
+            } for r in rows
+        }
+    finally:
+        await conn.close()
+
+@app.put("/api/v1/config")
+async def update_config(updates: ConfigUpdate, payload: dict = Depends(verify_jwt_token)):
+    from fastapi import HTTPException as _HTTPException
+    if payload.get("role") != "admin":
+        raise _HTTPException(status_code=403, detail="Solo administradores pueden modificar la configuracion")
+    conn = await get_db_connection_admin()
+    try:
+        changed = {}
+        data = updates.dict(exclude_none=True)
+        for key, val in data.items():
+            await conn.execute(
+                "UPDATE rag_config SET value=$1, updated_by=$2, updated_at=CURRENT_TIMESTAMP WHERE key=$3",
+                str(val), payload.get("sub", "admin"), key
+            )
+            changed[key] = str(val)
+        return {"status": "ok", "updated": changed}
     finally:
         await conn.close()

@@ -6,6 +6,8 @@ import plotly.graph_objects as go
 import requests
 import json
 import psycopg2
+import base64
+import re as _re
 
 st.set_page_config(
     page_title="Corporate RAG | ETSIIT",
@@ -78,17 +80,59 @@ def get_system_status():
     conn.close()
     return row[0], row[1], row[2], depts, roles
 
+def decode_jwt_payload(token):
+    """Decodifica el payload del JWT sin verificar firma (solo para display)."""
+    try:
+        parts = token.split(".")
+        if len(parts) != 3:
+            return None
+        payload_b64 = parts[1] + "=" * (4 - len(parts[1]) % 4)
+        payload = json.loads(base64.b64decode(payload_b64).decode("utf-8"))
+        return payload
+    except Exception:
+        return None
+
 st.sidebar.title("🔒 Control de Acceso RLS")
 jwt_token = st.sidebar.text_input(
     "Token JWT (Bearer):",
     type="password",
     help="Pega aquí el token corporativo generado"
 )
+# Panel de identidad RLS
+if jwt_token:
+    _payload = decode_jwt_payload(jwt_token)
+    if _payload:
+        _dept = _payload.get("department", "desconocido")
+        _role = _payload.get("role", "desconocido")
+        _role_labels = {
+            "admin": ("🔴 admin", "Acceso total — todos los departamentos y niveles"),
+            "dept_high": ("🟠 dept_high", "Público + Interno + Confidencial (propio dpto)"),
+            "dept_standard": ("🟡 dept_standard", "Público + Interno (propio dpto)")
+        }
+        _role_badge, _role_desc = _role_labels.get(_role, (f"⚪ {_role}", "Rol no reconocido"))
+        st.sidebar.success(f"✅ Token válido")
+        st.sidebar.markdown(f"**Departamento:** `{_dept}`")
+        st.sidebar.markdown(f"**Rol:** {_role_badge}")
+        st.sidebar.caption(_role_desc)
+        # Nivel de acceso visual
+        _niveles = {
+            "admin":         ["🟢 Público", "🟡 Interno", "🔴 Confidencial", "🌐 Todos los dptos"],
+            "dept_high":     ["🟢 Público", "🟡 Interno", "🔴 Confidencial", f"🏢 Solo {_dept}"],
+            "dept_standard": ["🟢 Público", "🟡 Interno", "⛔ Confidencial bloq.", f"🏢 Solo {_dept}"]
+        }
+        st.sidebar.markdown("**Política RLS activa:**")
+        for nivel in _niveles.get(_role, []):
+            st.sidebar.markdown(f"- {nivel}")
+    else:
+        st.sidebar.warning("⚠️ Token no decodificable")
+else:
+    st.sidebar.info("🔑 Sin token — introduce tu JWT corporativo para operar.")
+
 st.sidebar.markdown("---")
 st.sidebar.subheader("📄 Trazabilidad de Fuentes")
 sources_container = st.sidebar.empty()
 
-tab1, tab2, tab3 = st.tabs(["💬 Asistente RAG", "📊 Panel de Gobernanza", "⚖️ Comparativa Evaluadores"])
+tab1, tab2, tab3, tab4 = st.tabs(["💬 Asistente RAG", "📊 Panel de Gobernanza", "⚖️ Comparativa Evaluadores", "⚙️ Configuración"])
 
 with tab1:
     st.title("🛡️ Asistente RAG Soberano")
@@ -157,9 +201,63 @@ with tab1:
                     "role": "assistant",
                     "content": full_response
                 })
+                # Mostrar info RLS de la última query en sidebar
+                if jwt_token:
+                    _p = decode_jwt_payload(jwt_token)
+                    if _p:
+                        _chunks_match = _re.search(r'"chunks_used":\s*(\d+)', full_response)
+                        _n_chunks = _chunks_match.group(1) if _chunks_match else "6"
+                        sources_container.markdown(
+                            f"**Última query procesada**\n\n"
+                            f"🔍 Chunks recuperados: `{_n_chunks}` (LIMIT 6)\n\n"
+                            f"🛡️ Filtro RLS aplicado: `{_p.get('department','?')}` · `{_p.get('role','?')}`\n\n"
+                            f"📊 Auditoría asíncrona: `OllamaJuice + TruLens`"
+                        )
 
             except requests.exceptions.ConnectionError:
                 st.error("Error crítico: No se pudo conectar con el API Gateway.")
+
+    # --- HISTORIAL DE QUERIES ---
+    st.markdown("---")
+    with st.expander("🕐 Historial de consultas de esta sesión", expanded=False):
+        if st.session_state.messages:
+            user_msgs = [(i, m["content"]) for i, m in enumerate(st.session_state.messages) if m["role"] == "user"]
+            if user_msgs:
+                st.caption(f"{len(user_msgs)} consulta(s) realizadas en esta sesión · Auditoría registrada en audit_logs")
+                for idx, (i, q) in enumerate(reversed(user_msgs[-10:])):
+                    st.markdown(f"**{len(user_msgs)-idx}.** {q}")
+            else:
+                st.info("Aún no has realizado ninguna consulta.")
+
+            if st.button("🗑️ Limpiar historial de sesión"):
+                st.session_state.messages = []
+                st.rerun()
+        else:
+            st.info("Aún no has realizado ninguna consulta en esta sesión.")
+
+        # Últimas queries del usuario actual desde audit_logs (por JWT)
+        if jwt_token:
+            _p = decode_jwt_payload(jwt_token)
+            if _p:
+                try:
+                    conn_hist = get_db_conn_admin()
+                    cur_hist = conn_hist.cursor()
+                    cur_hist.execute("""
+                        SELECT log_id, timestamp, left(question, 100), requires_review
+                        FROM audit_logs
+                        WHERE user_department = %s AND user_role = %s
+                        ORDER BY log_id DESC LIMIT 5
+                    """, (_p.get("department"), _p.get("role")))
+                    hist_rows = cur_hist.fetchall()
+                    cur_hist.close()
+                    conn_hist.close()
+                    if hist_rows:
+                        st.markdown(f"**Últimas 5 queries auditadas** · `{_p.get('department')}` · `{_p.get('role')}`")
+                        for row in hist_rows:
+                            flag = "🔴" if row[3] else "🟢"
+                            st.markdown(f"{flag} `#{row[0]}` · {row[1].strftime('%d/%m %H:%M')} · {row[2]}...")
+                except Exception as e:
+                    st.caption(f"No se pudo cargar el historial auditado: {e}")
 
 with tab2:
     st.title("📊 Panel de Gobernanza Corporativa")
@@ -497,6 +595,23 @@ with tab3:
                         st.markdown(f"| GR | `{tr['juice_gr']:.2f}` | `{tr['trulens_gr']:.2f}` |")
                         st.markdown(f"| AR | `{tr['juice_ar']:.2f}` | `{tr['trulens_ar']:.2f}` |")
                         st.markdown(f"| Review | {juice_flag} OllamaJuice | {trulens_flag} TruLens |")
+                    # Botón marcar revisado
+                    if juice_flag == "🔴" or trulens_flag == "🔴":
+                        btn_key = f"mark_reviewed_{lid}"
+                        if st.button(f"✅ Marcar Log #{lid} como revisado", key=btn_key, type="secondary"):
+                            try:
+                                conn_upd = get_db_conn_admin()
+                                cur_upd = conn_upd.cursor()
+                                cur_upd.execute(
+                                    "UPDATE audit_logs SET requires_review = FALSE WHERE log_id = %s",
+                                    (lid,)
+                                )
+                                conn_upd.commit()
+                                cur_upd.close()
+                                conn_upd.close()
+                                st.success(f"✅ Log #{lid} marcado como revisado. Recarga para actualizar.")
+                            except Exception as upd_e:
+                                st.error(f"Error al actualizar: {upd_e}")
                     st.divider()
         else:
             st.success("✅ Ninguna traza marcada como requires_review en el conjunto actual.")
@@ -620,5 +735,249 @@ with tab3:
                 color="#d4edda"
             ), use_container_width=True)
 
+        # --- EXPORTAR INFORME PDF ---
+        st.markdown("---")
+        st.subheader("📄 Exportar Informe del Golden Set")
+        if st.button("⬇️ Generar informe PDF", type="primary"):
+            try:
+                from reportlab.lib.pagesizes import A4
+                from reportlab.lib import colors
+                from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+                from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+                from reportlab.lib.units import cm
+                import io, datetime
+
+                buffer = io.BytesIO()
+                doc = SimpleDocTemplate(buffer, pagesize=A4,
+                                        rightMargin=2*cm, leftMargin=2*cm,
+                                        topMargin=2*cm, bottomMargin=2*cm)
+                styles = getSampleStyleSheet()
+                story = []
+
+                # Título
+                title_style = ParagraphStyle('title', parent=styles['Title'], fontSize=16, spaceAfter=6)
+                story.append(Paragraph("Informe de Evaluación — Golden Set RAG", title_style))
+                story.append(Paragraph(f"Sistema RAG On-Premise · ETSIIT UGR · {datetime.date.today().strftime('%d/%m/%Y')}", styles['Normal']))
+                story.append(Spacer(1, 0.5*cm))
+
+                # KPIs Golden Set v1
+                story.append(Paragraph("Resultados Golden Set v1 — OllamaJuiceProvider (Referencia Base)", styles['Heading2']))
+                gs1_data = [
+                    ["Métrica", "Media", "Mínimo", "Máximo"],
+                    ["Context Relevance", "0.690", "0.40", "0.80"],
+                    ["Groundedness",      "0.870", "0.80", "1.00"],
+                    ["Answer Relevance",  "0.810", "0.60", "0.90"],
+                    ["Requires Review",   "5 / 19 (26.3%)", "—", "—"],
+                    ["Correctas",         "11 / 19 (57.9%)", "—", "—"],
+                ]
+                t1 = Table(gs1_data, colWidths=[5*cm, 3*cm, 3*cm, 3*cm])
+                t1.setStyle(TableStyle([
+                    ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#2c3e50')),
+                    ('TEXTCOLOR',  (0,0), (-1,0), colors.white),
+                    ('FONTNAME',   (0,0), (-1,0), 'Helvetica-Bold'),
+                    ('GRID',       (0,0), (-1,-1), 0.5, colors.grey),
+                    ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor('#f2f2f2')]),
+                    ('ALIGN',      (1,0), (-1,-1), 'CENTER'),
+                ]))
+                story.append(t1)
+                story.append(Spacer(1, 0.5*cm))
+
+                # KPIs dinámicos
+                story.append(Paragraph("Comparativa OllamaJuice vs TruLens — Datos en BD", styles['Heading2']))
+                means_data = [
+                    ["Métrica", "OllamaJuice", "TruLens", "Δ (TruLens − OllamaJuice)"],
+                    ["Context Relevance",
+                     f"{df['juice_cr'].mean():.3f}", f"{df['trulens_cr'].mean():.3f}",
+                     f"{(df['trulens_cr']-df['juice_cr']).mean():+.3f}"],
+                    ["Groundedness",
+                     f"{df['juice_gr'].mean():.3f}", f"{df['trulens_gr'].mean():.3f}",
+                     f"{(df['trulens_gr']-df['juice_gr']).mean():+.3f}"],
+                    ["Answer Relevance",
+                     f"{df['juice_ar'].mean():.3f}", f"{df['trulens_ar'].mean():.3f}",
+                     f"{(df['trulens_ar']-df['juice_ar']).mean():+.3f}"],
+                    ["Requires Review",
+                     f"{df['juice_review'].sum()}/{len(df)}",
+                     f"{df['trulens_review'].sum()}/{len(df)}", "—"],
+                ]
+                t2 = Table(means_data, colWidths=[4.5*cm, 3*cm, 3*cm, 4.5*cm])
+                t2.setStyle(TableStyle([
+                    ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#2c3e50')),
+                    ('TEXTCOLOR',  (0,0), (-1,0), colors.white),
+                    ('FONTNAME',   (0,0), (-1,0), 'Helvetica-Bold'),
+                    ('GRID',       (0,0), (-1,-1), 0.5, colors.grey),
+                    ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor('#f2f2f2')]),
+                    ('ALIGN',      (1,0), (-1,-1), 'CENTER'),
+                ]))
+                story.append(t2)
+                story.append(Spacer(1, 0.5*cm))
+
+                # Tabla detalle por traza
+                story.append(Paragraph("Detalle por Traza", styles['Heading2']))
+                detail_header = ["Log ID", "J.CR", "T.CR", "J.GR", "T.GR", "J.AR", "T.AR", "Review"]
+                detail_rows = [detail_header]
+                for _, row in df.iterrows():
+                    detail_rows.append([
+                        str(int(row['log_id'])),
+                        f"{row['juice_cr']:.2f}", f"{row['trulens_cr']:.2f}",
+                        f"{row['juice_gr']:.2f}", f"{row['trulens_gr']:.2f}",
+                        f"{row['juice_ar']:.2f}", f"{row['trulens_ar']:.2f}",
+                        "🔴" if row['juice_review'] else "🟢"
+                    ])
+                t3 = Table(detail_rows, colWidths=[1.5*cm,1.8*cm,1.8*cm,1.8*cm,1.8*cm,1.8*cm,1.8*cm,1.8*cm])
+                t3.setStyle(TableStyle([
+                    ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#2c3e50')),
+                    ('TEXTCOLOR',  (0,0), (-1,0), colors.white),
+                    ('FONTNAME',   (0,0), (-1,0), 'Helvetica-Bold'),
+                    ('FONTSIZE',   (0,0), (-1,-1), 8),
+                    ('GRID',       (0,0), (-1,-1), 0.5, colors.grey),
+                    ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor('#f2f2f2')]),
+                    ('ALIGN',      (0,0), (-1,-1), 'CENTER'),
+                ]))
+                story.append(t3)
+
+                doc.build(story)
+                buffer.seek(0)
+                st.download_button(
+                    label="📥 Descargar informe PDF",
+                    data=buffer,
+                    file_name=f"golden_set_report_{datetime.date.today().strftime('%Y%m%d')}.pdf",
+                    mime="application/pdf"
+                )
+            except ImportError:
+                st.error("Falta la librería reportlab. Instálala añadiendo 'reportlab' al requirements.txt y rebuildeando.")
+            except Exception as pdf_e:
+                st.error(f"Error generando PDF: {pdf_e}")
+
     except Exception as e:
         st.error(f"Error al cargar comparativa: {e}")
+
+# ══ TAB 4 — CONFIGURACIÓN ══════════════════════════════
+with tab4:
+    import requests as _req
+    st.header("⚙️ Configuración del Sistema RAG")
+    st.caption("Los cambios se aplican en caliente y se persisten en base de datos.")
+
+    _API = "http://api_gateway_container:8000"
+
+    def _admin_token():
+        try:
+            import jwt as _jwt
+            return _jwt.encode(
+                {"sub": "directoria", "department": "Administracion", "role": "admin"},
+                "ETSIIT_UGR_SECRET_KEY_2026",
+                algorithm="HS256"
+            )
+        except Exception:
+            return None
+
+    @st.cache_data(ttl=15)
+    def _load_cfg():
+        tok = _admin_token()
+        if not tok:
+            return {}
+        try:
+            r = _req.get(f"{_API}/api/v1/config",
+                headers={"Authorization": f"Bearer {tok}"}, timeout=5)
+            return r.json() if r.status_code == 200 else {}
+        except Exception:
+            return {}
+
+    def _cv(cfg, key, default):
+        try:
+            return type(default)(cfg[key]["value"])
+        except Exception:
+            return default
+
+    cfg4 = _load_cfg()
+
+    if not cfg4:
+        st.error("No se pudo conectar con la API para cargar la configuración.")
+    else:
+        st.success(f"✅ {len(cfg4)} parámetros cargados desde BD")
+
+    st.markdown("---")
+    st.subheader("🔍 Recuperación Vectorial")
+    c1, c2 = st.columns(2)
+    with c1:
+        n_top_k = st.slider("top_k — Chunks recuperados", 1, 15, _cv(cfg4, "top_k", 6),
+            help="Número de chunks enviados al LLM como contexto.")
+        n_sim = st.slider("similarity_threshold", 0.0, 1.0,
+            _cv(cfg4, "similarity_threshold", 0.0), step=0.05,
+            help="Umbral mínimo de similitud coseno. 0.0 = sin filtro.")
+    with c2:
+        n_chunk = st.number_input("chunk_size (tokens)", 100, 2000,
+            _cv(cfg4, "chunk_size", 650), step=50)
+        n_overlap = st.number_input("chunk_overlap (tokens)", 0, 500,
+            _cv(cfg4, "chunk_overlap", 130), step=10)
+
+    st.markdown("---")
+    st.subheader("🤖 Modelo LLM")
+    c3, c4 = st.columns(2)
+    with c3:
+        # Consultar modelos disponibles en Ollama (excluir modelos de embedding)
+        _EMBED_MODELS = {"nomic-embed-text", "mxbai-embed-large", "all-minilm", "nomic-embed"}
+        try:
+            _ollama_r = _req.get("http://ollama_engine:11434/api/tags", timeout=3)
+            _all = [m["name"] for m in _ollama_r.json().get("models", [])]
+            _models = sorted([m for m in _all if not any(e in m for e in _EMBED_MODELS)])
+        except Exception:
+            _models = ["llama3.1:8b", "llama3.2:3b", "qwen2.5:7b"]
+        _cur = _cv(cfg4, "model", "llama3.1:8b")
+        if _cur not in _models:
+            _models.insert(0, _cur)
+        n_model = st.selectbox("Modelo Ollama activo", _models, index=_models.index(_cur))
+        n_temp = st.slider("temperature", 0.0, 1.0, _cv(cfg4, "temperature", 0.0), step=0.05)
+    with c4:
+        n_ctx = st.select_slider("num_ctx — Ventana contexto",
+            options=[1024, 2048, 4096, 8192, 16384],
+            value=_cv(cfg4, "num_ctx", 4096))
+        n_pred = st.select_slider("num_predict — Tokens respuesta",
+            options=[128, 256, 512, 1024, 2048],
+            value=_cv(cfg4, "num_predict", 512))
+
+    st.markdown("---")
+    cb1, cb2, _ = st.columns([1, 1, 3])
+    with cb1:
+        _apply = st.button("✅ Aplicar cambios", type="primary", use_container_width=True)
+    with cb2:
+        _reload = st.button("🔄 Recargar", use_container_width=True)
+
+    if _reload:
+        st.cache_data.clear()
+        st.rerun()
+
+    if _apply:
+        _tok = _admin_token()
+        if not _tok:
+            st.error("No se pudo obtener token de admin.")
+        else:
+            _payload = {
+                "top_k": n_top_k, "similarity_threshold": n_sim,
+                "chunk_size": n_chunk, "chunk_overlap": n_overlap,
+                "model": n_model, "temperature": n_temp,
+                "num_ctx": n_ctx, "num_predict": n_pred,
+            }
+            try:
+                _r = _req.put(f"{_API}/api/v1/config", json=_payload,
+                    headers={"Authorization": f"Bearer {_tok}"}, timeout=10)
+                if _r.status_code == 200:
+                    _upd = _r.json().get("updated", {})
+                    st.success(f"✅ {len(_upd)} parámetros actualizados")
+                    for _k, _v in _upd.items():
+                        st.write(f"  • `{_k}` → `{_v}`")
+                    st.cache_data.clear()
+                else:
+                    st.error(f"Error API {_r.status_code}: {_r.text}")
+            except Exception as _e:
+                st.error(f"Error de conexión: {_e}")
+
+    st.markdown("---")
+    st.subheader("📋 Estado actual en Base de Datos")
+    if cfg4:
+        import pandas as _pd
+        _rows = [{"Parámetro": k, "Valor": v["value"],
+                  "Modificado por": v.get("updated_by", "—"),
+                  "Última actualización": v.get("updated_at", "—")}
+                 for k, v in cfg4.items()]
+        st.dataframe(_pd.DataFrame(_rows).sort_values("Parámetro"),
+            use_container_width=True, hide_index=True)

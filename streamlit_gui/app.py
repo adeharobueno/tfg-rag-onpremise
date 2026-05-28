@@ -5,6 +5,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import requests
 import json
+import os
 import psycopg2
 import base64
 import re as _re
@@ -20,7 +21,7 @@ def get_db_conn_admin():
         host="postgres_db",
         database="tfg_rag_db",
         user="postgres",
-        password="Sub_Secret_Pass_Admin_2026!"
+        password=os.getenv("POSTGRES_PASSWORD", "Sub_Secret_Pass_Admin_2026!")
     )
 
 def get_expired_documents():
@@ -76,9 +77,12 @@ def get_system_status():
     row = cur.fetchone()
     cur.execute("SELECT COUNT(DISTINCT user_department), COUNT(DISTINCT user_role) FROM audit_logs")
     depts, roles = cur.fetchone()
+    cur.execute("SELECT value FROM rag_config WHERE key='model'")
+    model_row = cur.fetchone()
+    model_activo = model_row[0] if model_row else "llama3.2:3b"
     cur.close()
     conn.close()
-    return row[0], row[1], row[2], depts, roles
+    return row[0], row[1], row[2], depts, roles, model_activo
 
 def decode_jwt_payload(token):
     """Decodifica el payload del JWT sin verificar firma (solo para display)."""
@@ -282,9 +286,9 @@ with tab2:
     st.subheader("⚙️ Estado del Sistema")
     st.caption("Parámetros operativos en tiempo real — inferencia 100% on-premise sin dependencias cloud.")
     try:
-        lat, total_q, chunks_medio, n_depts, n_roles = get_system_status()
+        lat, total_q, chunks_medio, n_depts, n_roles, model_activo = get_system_status()
         sc1, sc2, sc3, sc4, sc5 = st.columns(5)
-        sc1.metric("Modelo activo", "Llama 3.1 8B", help="Quantización Q4_K_M — inferencia CPU Xeon Silver 4410Y")
+        sc1.metric("Modelo activo", model_activo, help="Modelo LLM activo según rag_config — inferencia 100% on-premise")
         sc2.metric("Embedding", "nomic-embed-text", help="768 dimensiones — índice HNSW cosine en pgvector")
         sc3.metric("Queries totales", int(total_q) if total_q else 0, help="Interacciones registradas en audit_logs")
         sc4.metric("Chunks/query (media)", f"{chunks_medio:.1f}" if chunks_medio else "6.0", help="Límite vectorial configurado: LIMIT 6")
@@ -735,6 +739,78 @@ with tab3:
                 color="#d4edda"
             ), use_container_width=True)
 
+
+        # ── COMPARATIVA POR MODELO ─────────────────────────
+        st.markdown("---")
+        st.subheader("🔀 Comparativa de Modelos — Golden Set")
+        st.caption("Métricas OllamaJuice agrupadas por modelo usado en cada traza.")
+
+        try:
+            conn_m = get_db_conn_admin()
+            cur_m  = conn_m.cursor()
+            cur_m.execute("""
+                SELECT
+                    COALESCE(a.model_used, 'desconocido') AS modelo,
+                    COUNT(*)                               AS n_trazas,
+                    ROUND(AVG(CAST(substring(a.response FROM %(cr)s) AS FLOAT))::numeric, 3) AS avg_cr,
+                    ROUND(AVG(CAST(substring(a.response FROM %(gr)s) AS FLOAT))::numeric, 3) AS avg_gr,
+                    ROUND(AVG(CAST(substring(a.response FROM %(ar)s) AS FLOAT))::numeric, 3) AS avg_ar,
+                    SUM(CASE WHEN a.requires_review THEN 1 ELSE 0 END)                       AS n_review
+                FROM audit_logs a
+                WHERE a.response LIKE %(like)s
+                GROUP BY COALESCE(a.model_used, 'desconocido')
+                ORDER BY avg_gr DESC
+            """, {
+                "cr":   r'"context_relevance":\s*([0-9.]+)',
+                "gr":   r'"groundedness":\s*([0-9.]+)',
+                "ar":   r'"answer_relevance":\s*([0-9.]+)',
+                "like": '%"context_relevance"%'
+            })
+            rows_m = cur_m.fetchall()
+            cur_m.close(); conn_m.close()
+
+            if rows_m:
+                import pandas as pd
+                df_m = pd.DataFrame(rows_m, columns=["Modelo","Trazas","CR medio","GR medio","AR medio","Requires Review"])
+                df_m["Review %"] = (df_m["Requires Review"] / df_m["Trazas"] * 100).round(1).astype(str) + "%"
+
+                # Tabla resumen
+                st.dataframe(
+                    df_m[["Modelo","Trazas","CR medio","GR medio","AR medio","Review %"]],
+                    use_container_width=True, hide_index=True
+                )
+
+                # Gráfico de barras comparativo
+                if len(df_m) > 1:
+                    import plotly.graph_objects as go
+                    fig_m = go.Figure()
+                    metrics_m = ["CR medio", "GR medio", "AR medio"]
+                    colors_m  = ["#3b82f6", "#10b981", "#f59e0b"]
+                    for col, color in zip(metrics_m, colors_m):
+                        fig_m.add_trace(go.Bar(
+                            name=col, x=list(df_m["Modelo"]), y=list(df_m[col]),
+                            marker_color=color, text=list(df_m[col]),
+                            textposition="outside"
+                        ))
+                    fig_m.update_layout(
+                        barmode="group", height=350,
+                        yaxis=dict(range=[0, 1.15], title="Puntuación"),
+                        xaxis_title="Modelo",
+                        legend=dict(orientation="h", y=1.1),
+                        margin=dict(t=30, b=20),
+                        plot_bgcolor="rgba(0,0,0,0)",
+                        paper_bgcolor="rgba(0,0,0,0)"
+                    )
+                    fig_m.add_hline(y=0.6, line_dash="dash", line_color="red",
+                        annotation_text="Umbral alerta (0.6)", annotation_position="right")
+                    st.plotly_chart(fig_m, use_container_width=True)
+                else:
+                    st.info("ℹ️ Solo hay trazas de un modelo. Cambia el modelo en Tab 4 y realiza más consultas para ver la comparativa.")
+            else:
+                st.info("Sin datos suficientes para comparativa de modelos.")
+        except Exception as e_m:
+            st.error(f"Error cargando comparativa de modelos: {e_m}")
+
         # --- EXPORTAR INFORME PDF ---
         st.markdown("---")
         st.subheader("📄 Exportar Informe del Golden Set")
@@ -864,13 +940,13 @@ with tab4:
             import jwt as _jwt
             return _jwt.encode(
                 {"sub": "directoria", "department": "Administracion", "role": "admin"},
-                "ETSIIT_UGR_SECRET_KEY_2026",
+                os.getenv("JWT_SECRET", "ETSIIT_UGR_SECRET_KEY_2026"),
                 algorithm="HS256"
             )
         except Exception:
             return None
 
-    @st.cache_data(ttl=15)
+    @st.cache_data(ttl=3)
     def _load_cfg():
         tok = _admin_token()
         if not tok:
@@ -922,7 +998,7 @@ with tab4:
             _models = sorted([m for m in _all if not any(e in m for e in _EMBED_MODELS)])
         except Exception:
             _models = ["llama3.1:8b", "llama3.2:3b", "qwen2.5:7b"]
-        _cur = _cv(cfg4, "model", "llama3.1:8b")
+        _cur = _cv(cfg4, "model", "llama3.2:3b")
         if _cur not in _models:
             _models.insert(0, _cur)
         n_model = st.selectbox("Modelo Ollama activo", _models, index=_models.index(_cur))

@@ -37,7 +37,7 @@ services:
   # MOTOR DE INFERENCIA LOCAL (OLLAMA ENGINE)
   # ============================================================================
   ollama_engine:
-    image: ollama/ollama:latest
+    image: ollama/ollama:0.24.0  # Versión fijada — RNF-M02
     container_name: ollama_engine
     restart: always
     volumes:
@@ -96,8 +96,12 @@ services:
     restart: always
     ports:
       - "8000:8000"
+    env_file:
+      - .env
     environment:
-      - DATABASE_URL=postgresql://api_gateway:App_Pass_Gateway_Secure_2026%3F@postgres_db:5432/tfg_rag_db
+      - DATABASE_URL=postgresql://api_gateway:${API_GATEWAY_PASSWORD}@postgres_db:5432/${POSTGRES_DB}
+      - DATABASE_URL_ADMIN=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres_db:5432/${POSTGRES_DB}
+      - JWT_SECRET=${JWT_SECRET}
     networks:
       - rag_network
     depends_on:
@@ -110,6 +114,8 @@ services:
   audit_worker:
     build: ./audit_worker
     container_name: audit_worker
+    env_file:
+      - .env
     depends_on:
       - postgres_db
       - ollama_engine
@@ -125,6 +131,11 @@ services:
     container_name: streamlit_gui
     ports:
       - "8501:8501"
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - API_GATEWAY_URL=http://api_gateway:8000
     depends_on:
       - api_gateway
     networks:

@@ -1,21 +1,135 @@
-from fastapi import FastAPI, Depends, HTTPException, Header, BackgroundTasks
+from fastapi import FastAPI, Depends, HTTPException, Header, BackgroundTasks, Request
 from fastapi.responses import StreamingResponse
 from app.database import get_db_connection, get_db_connection_admin, search_vectors_with_rls
 from pydantic import BaseModel
 import requests, jwt, json
+from datetime import datetime, timedelta, timezone
 
 app = FastAPI(title="TFG RAG Secure API Gateway", version="1.0.0")
-JWT_SECRET = "ETSIIT_UGR_SECRET_KEY_2026"
+import os as _os
+JWT_SECRET = _os.getenv("JWT_SECRET")
+JWT_EXPIRATION_MINUTES = 60
+
+# ─── RF-D05: LOG DE DENEGACIONES RBAC ─────────────────
+async def log_rbac_denial(username: str, department: str, role: str,
+                          endpoint: str, reason: str, detail: str = None,
+                          ip: str = None):
+    """Registra una denegación de acceso en rbac_denials (RF-D05)."""
+    try:
+        conn = await get_db_connection()
+        await conn.execute(
+            """INSERT INTO rbac_denials
+               (username, department, user_role, endpoint, denial_reason, detail, ip_address)
+               VALUES ($1, $2, $3, $4, $5, $6, $7)""",
+            username, department, role, endpoint, reason, detail, ip
+        )
+        await conn.close()
+    except Exception as e:
+        print(f"[RF-D05] Error registrando denegación RBAC: {e}")
 
 class QueryRequest(BaseModel):
     question: str
 
+class AuthRequest(BaseModel):
+    username: str
+    password: str
+
 def verify_jwt_token(authorization: str = Header(...)):
     try:
         token = authorization.split(" ")[1]
-        return jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
-    except:
+        return jwt.decode(token, JWT_SECRET, algorithms=["HS256"],
+                          options={"verify_exp": True, "require": ["department", "role"]})
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expirado — vuelve a iniciar sesión")
+    except Exception:
         raise HTTPException(status_code=401, detail="Token corporativo inválido")
+
+# Middleware para capturar denegaciones 401/403 y registrarlas en rbac_denials
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request as StarletteRequest
+import base64 as _b64
+
+class RBACDenialMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: StarletteRequest, call_next):
+        response = await call_next(request)
+        if response.status_code in (401, 403):
+            # Intentar extraer info del token sin verificar firma
+            username = "anonymous"
+            department = None
+            role = None
+            auth = request.headers.get("authorization", "")
+            if auth.startswith("Bearer ") and auth.count(".") == 2:
+                try:
+                    payload_b64 = auth.split(" ")[1].split(".")[1]
+                    payload_b64 += "=" * (4 - len(payload_b64) % 4)
+                    payload = json.loads(_b64.b64decode(payload_b64))
+                    username = payload.get("sub", "anonymous")
+                    department = payload.get("department")
+                    role = payload.get("role")
+                except Exception:
+                    pass
+            reason = "token_expired" if response.status_code == 401 else "role_forbidden"
+            await log_rbac_denial(
+                username=username, department=department, role=role,
+                endpoint=f"{request.method} {request.url.path}",
+                reason=reason,
+                detail=f"HTTP {response.status_code}",
+                ip=request.client.host if request.client else None
+            )
+        return response
+
+app.add_middleware(RBACDenialMiddleware)
+
+@app.post("/auth/token")
+async def login(credentials: AuthRequest):
+    """
+    Autentica un usuario contra la tabla 'users' (bcrypt via pgcrypto)
+    y devuelve un JWT firmado con claims sub, department, role y exp.
+    Cumple RF-C01 y RF-C02 del Capítulo 4.
+    """
+    conn = await get_db_connection_admin()
+    try:
+        row = await conn.fetchrow(
+            """
+            SELECT user_id, username, department, user_role
+            FROM users
+            WHERE username = $1
+              AND password_hash = crypt($2, password_hash)
+            """,
+            credentials.username, credentials.password
+        )
+    finally:
+        await conn.close()
+
+    if not row:
+        # RF-D05: Registrar intento de login fallido
+        await log_rbac_denial(
+            username=credentials.username, department=None, role=None,
+            endpoint="POST /auth/token",
+            reason="login_failed",
+            detail="Credenciales inválidas"
+        )
+        raise HTTPException(status_code=401, detail="Credenciales inválidas")
+
+    now = datetime.now(timezone.utc)
+    payload = {
+        "sub": row["username"],
+        "department": row["department"],
+        "role": row["user_role"],
+        "iat": now,
+        "exp": now + timedelta(minutes=JWT_EXPIRATION_MINUTES)
+    }
+    token = jwt.encode(payload, JWT_SECRET, algorithm="HS256")
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "expires_in": JWT_EXPIRATION_MINUTES * 60,
+        "user": {
+            "username": row["username"],
+            "department": row["department"],
+            "role": row["user_role"]
+        }
+    }
 
 SYSTEM_PROMPT = """Eres un microservicio interno de extracción de datos. Tu única tarea es extraer el tema utilizando ESTRICTAMENTE este formato: 'Según el archivo [fuente], trata sobre [tema].' No emitas advertencias, disclaimers ni texto conversacional."""
 
@@ -28,8 +142,6 @@ Pregunta: ¿Sobre qué temas trata el documento recuperado?"""
 
 FEW_SHOT_ASSISTANT = "Según el archivo recortes_q3.pdf, trata sobre recortes salariales y despidos masivos."
 
-@app.post("/api/v1/chat/stream")
-
 async def _get_active_model(conn) -> str:
     try:
         conn_cfg = await get_db_connection_admin()
@@ -39,6 +151,7 @@ async def _get_active_model(conn) -> str:
     except Exception:
         return "llama3.1:8b"
 
+@app.post("/api/v1/chat/stream")
 async def rag_chat_stream(request: QueryRequest, background_tasks: BackgroundTasks, token_data: dict = Depends(verify_jwt_token)):
     # 1. Vectorización
     ollama_embed_url = "http://ollama_engine:11434/api/embeddings"
@@ -56,7 +169,19 @@ async def rag_chat_stream(request: QueryRequest, background_tasks: BackgroundTas
         await conn.close()
 
     if not results:
+        # RF-D05: Registrar denegación silenciosa por RLS
+        background_tasks.add_task(
+            log_rbac_denial,
+            username=token_data.get("sub", "unknown"),
+            department=dept, role=role,
+            endpoint="POST /api/v1/chat/stream",
+            reason="rls_empty",
+            detail=f"Query: {request.question[:200]}"
+        )
         return {"error": "Operación denegada"}
+
+    # 2b. Obtener modelo activo
+    _active_model_name = await _get_active_model(None)
 
     # 3. Metadatos de Trazabilidad
     sources = [
@@ -113,12 +238,12 @@ async def rag_chat_stream(request: QueryRequest, background_tasks: BackgroundTas
         try:
             write_conn = await get_db_connection()
             insert_query = """
-                INSERT INTO audit_logs (user_department, user_role, question, response, context_used, chunks_id)
-                VALUES ($1, $2, $3, $4, $5, $6);
+                INSERT INTO audit_logs (user_department, user_role, question, response, context_used, chunks_id, model_used)
+                VALUES ($1, $2, $3, $4, $5, $6, $7);
             """
             await write_conn.execute(
                 insert_query, 
-                dept, role, request.question, full_response_accumulator[0], context_text, chunks_id
+                dept, role, request.question, full_response_accumulator[0], context_text, chunks_id, _active_model_name
             )
             await write_conn.close()
         except Exception as e:
@@ -206,7 +331,7 @@ async def update_config(updates: ConfigUpdate, payload: dict = Depends(verify_jw
     conn = await get_db_connection_admin()
     try:
         changed = {}
-        data = updates.dict(exclude_none=True)
+        data = updates.model_dump(exclude_none=True)
         for key, val in data.items():
             await conn.execute(
                 "UPDATE rag_config SET value=$1, updated_by=$2, updated_at=CURRENT_TIMESTAMP WHERE key=$3",
@@ -214,5 +339,115 @@ async def update_config(updates: ConfigUpdate, payload: dict = Depends(verify_jw
             )
             changed[key] = str(val)
         return {"status": "ok", "updated": changed}
+    finally:
+        await conn.close()
+
+
+# ─── RF-C07: GESTIÓN DE USUARIOS Y ROLES ──────────────
+from typing import Optional as _Opt
+
+VALID_ROLES = {"admin", "dept_high", "dept_standard"}
+
+class UserCreate(_BaseModel):
+    username: str
+    password: str
+    department: str
+    user_role: str
+
+class UserUpdate(_BaseModel):
+    password: _Opt[str] = None
+    department: _Opt[str] = None
+    user_role: _Opt[str] = None
+
+def _require_admin(payload: dict):
+    if payload.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Operación restringida al rol admin")
+
+@app.post("/api/v1/admin/users", status_code=201)
+async def create_user(user: UserCreate, payload: dict = Depends(verify_jwt_token)):
+    """Crea un nuevo usuario con contraseña hasheada en bcrypt coste 12. Solo admin."""
+    _require_admin(payload)
+    if user.user_role not in VALID_ROLES:
+        raise HTTPException(status_code=422, detail=f"Rol inválido. Válidos: {', '.join(VALID_ROLES)}")
+    conn = await get_db_connection_admin()
+    try:
+        existing = await conn.fetchval("SELECT user_id FROM users WHERE username = $1", user.username)
+        if existing:
+            raise HTTPException(status_code=409, detail="El usuario ya existe")
+        await conn.execute(
+            """INSERT INTO users (username, password_hash, department, user_role)
+               VALUES ($1, crypt($2, gen_salt('bf', 12)), $3, $4)""",
+            user.username, user.password, user.department, user.user_role
+        )
+        return {"status": "created", "username": user.username,
+                "department": user.department, "user_role": user.user_role}
+    finally:
+        await conn.close()
+
+@app.get("/api/v1/admin/users")
+async def list_users(payload: dict = Depends(verify_jwt_token)):
+    """Lista los usuarios existentes sin exponer los hashes de contraseña. Solo admin."""
+    _require_admin(payload)
+    conn = await get_db_connection_admin()
+    try:
+        rows = await conn.fetch(
+            "SELECT user_id, username, department, user_role, created_at FROM users ORDER BY user_id"
+        )
+        return [
+            {"user_id": r["user_id"], "username": r["username"],
+             "department": r["department"], "user_role": r["user_role"],
+             "created_at": str(r["created_at"])}
+            for r in rows
+        ]
+    finally:
+        await conn.close()
+
+@app.put("/api/v1/admin/users/{username}")
+async def update_user(username: str, updates: UserUpdate, payload: dict = Depends(verify_jwt_token)):
+    """Actualiza departamento, rol o contraseña de un usuario. Solo admin."""
+    _require_admin(payload)
+    if updates.user_role is not None and updates.user_role not in VALID_ROLES:
+        raise HTTPException(status_code=422, detail=f"Rol inválido. Válidos: {', '.join(VALID_ROLES)}")
+    conn = await get_db_connection_admin()
+    try:
+        existing = await conn.fetchval("SELECT user_id FROM users WHERE username = $1", username)
+        if not existing:
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+        changed = {}
+        if updates.password is not None:
+            await conn.execute(
+                "UPDATE users SET password_hash = crypt($1, gen_salt('bf', 12)) WHERE username = $2",
+                updates.password, username
+            )
+            changed["password"] = "actualizada"
+        if updates.department is not None:
+            await conn.execute(
+                "UPDATE users SET department = $1 WHERE username = $2",
+                updates.department, username
+            )
+            changed["department"] = updates.department
+        if updates.user_role is not None:
+            await conn.execute(
+                "UPDATE users SET user_role = $1 WHERE username = $2",
+                updates.user_role, username
+            )
+            changed["user_role"] = updates.user_role
+        return {"status": "updated", "username": username, "changed": changed}
+    finally:
+        await conn.close()
+
+@app.delete("/api/v1/admin/users/{username}")
+async def delete_user(username: str, payload: dict = Depends(verify_jwt_token)):
+    """Elimina un usuario. Solo admin. No permite auto-eliminación."""
+    _require_admin(payload)
+    if payload.get("sub") == username:
+        raise HTTPException(status_code=400, detail="No puedes eliminar tu propio usuario")
+    conn = await get_db_connection_admin()
+    try:
+        existing = await conn.fetchval("SELECT user_id FROM users WHERE username = $1", username)
+        if not existing:
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+        await conn.execute("DELETE FROM users WHERE username = $1", username)
+        return {"status": "deleted", "username": username}
     finally:
         await conn.close()

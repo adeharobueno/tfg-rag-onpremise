@@ -1,0 +1,3782 @@
+[
+  {
+    "id": "GS-01",
+    "bloque": "A-ADM-std",
+    "question": "¿Cuál es la cuantía máxima autorizada para alojamiento en viajes?",
+    "expected": "110 EUR por noche",
+    "response": "Según el archivo documentos_ADM_02_Guia_Dietas.docx, no se proporciona información sobre una cuantía máxima autorizada para alojamiento en viajes. La guía de procedimientos solo regula el procedimiento ordinario para la devolución de gastos de viaje y dietas derivados de la asistencia a congresos internacionales de Inteligencia Artificial y Ciberseguridad, pero no establece una cuantía máxima autorizada para alojamiento.",
+    "metadata": [
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 11,
+        "file_name": "documentos_ADM_04_Acta_Presupuestos.docx",
+        "security": "Público"
+      },
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 13,
+        "file_name": "documentos_ADM_04_Protocolo_Reuniones.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "Administración",
+    "elapsed_seconds": 178.2,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-02",
+    "bloque": "A-ADM-std",
+    "question": "¿Cuál es la dieta máxima diaria para viajes internacionales?",
+    "expected": "75 EUR",
+    "response": "Según el archivo documentos_ADM_02_Guia_Dietas.docx, trata sobre la Guía de Procedimientos para la Solicitud de Dietas. La dieta máxima diaria para viajes internacionales es de 75 EUR.",
+    "metadata": [
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 4,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 18,
+        "file_name": "documentos_ADM_08_Auditoria_Riesgos.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "Administración",
+    "elapsed_seconds": 169.6,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-03",
+    "bloque": "A-ADM-std",
+    "question": "¿Cuántos días de antelación mínima se requieren para solicitar vacaciones?",
+    "expected": "15 días de antelación",
+    "response": "Según el archivo documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt, trata sobre que las solicitudes de vacaciones deben presentarse con un mínimo de 15 días de antelación.",
+    "metadata": [
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 5,
+        "file_name": "documentos_ADM_03_Control_Gastos.pdf",
+        "security": "Público"
+      },
+      {
+        "id": 11,
+        "file_name": "documentos_ADM_04_Acta_Presupuestos.docx",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "Administración",
+    "elapsed_seconds": 65.3,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-04",
+    "bloque": "A-ADM-std",
+    "question": "¿Cuál es el periodo mínimo de días consecutivos en vacaciones fraccionadas?",
+    "expected": "5 días laborables consecutivos",
+    "response": "Según el archivo documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt, trata sobre que el empleado podrá fraccionar sus vacaciones en un máximo de 3 periodos, siendo el periodo mínimo de 5 días laborables consecutivos.",
+    "metadata": [
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 12,
+        "file_name": "documentos_ADM_04_Protocolo_Reuniones.txt",
+        "security": "Público"
+      },
+      {
+        "id": 17,
+        "file_name": "documentos_ADM_07_Contrato_Infraestructura.docx",
+        "security": "Interno"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "Administración",
+    "elapsed_seconds": 181.6,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-05",
+    "bloque": "B-ADM-high",
+    "question": "¿Cuál es el valor de los activos corrientes en el cierre Q1 2026?",
+    "expected": "450.000 EUR",
+    "response": "Según el archivo documentos_ADM_06_Balance_Contable.pdf, trata sobre que los activos corrientes en el cierre Q1 2026 ascienden a 450.000 EUR.",
+    "metadata": [
+      {
+        "id": 93,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 15,
+        "file_name": "documentos_ADM_06_Balance_Contable.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 35,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 80,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 17,
+        "file_name": "documentos_ADM_07_Contrato_Infraestructura.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 52,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "Administración",
+    "elapsed_seconds": 113.7,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-06",
+    "bloque": "B-ADM-high",
+    "question": "¿Cuánto se ha invertido en proyectos de IA locales?",
+    "expected": "85.000 EUR",
+    "response": "Según el archivo documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf, trata sobre la inversión en infraestructura de Inteligencia Artificial (IA) y su viabilidad financiera a largo plazo. Sin embargo, no se proporciona información específica sobre la cantidad invertida en proyectos de IA locales.",
+    "metadata": [
+      {
+        "id": 190,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 11,
+        "file_name": "documentos_ADM_04_Acta_Presupuestos.docx",
+        "security": "Público"
+      },
+      {
+        "id": 216,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 105,
+        "file_name": "documentos_extensos_ADM_10_Pliego_Prescripciones_Tecnicas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 89,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 78,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "Administración",
+    "elapsed_seconds": 127.8,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-07",
+    "bloque": "B-ADM-high",
+    "question": "¿Cuál es el fondo de reserva para contingencias de ciberseguridad?",
+    "expected": "50.000 EUR",
+    "response": "Según el archivo documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf, trata sobre un fondo de inversión plurianual destinado a mitigar la dependencia de proveedores cloud externos y consolidar el modelo de soberanía del dato.",
+    "metadata": [
+      {
+        "id": 58,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 35,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 190,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 17,
+        "file_name": "documentos_ADM_07_Contrato_Infraestructura.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 12,
+        "file_name": "documentos_ADM_04_Protocolo_Reuniones.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "Administración",
+    "elapsed_seconds": 237.4,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-08",
+    "bloque": "B-ADM-high",
+    "question": "¿Cuál es el umbral crítico de tiempo de búsqueda vectorial definido en el plan estratégico?",
+    "expected": "50 milisegundos por query",
+    "response": "Según el archivo documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf, trata sobre el Plan Estratégico de Inversión en Infraestructura IA y Viabilidad Financiera a Largo Plazo (2026-2031) y el umbral crítico de tiempo de búsqueda vectorial es de 50.",
+    "metadata": [
+      {
+        "id": 48,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 100,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 40,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 56,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 50,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 38,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "Administración",
+    "elapsed_seconds": 313.9,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-09",
+    "bloque": "C-RRHH-std",
+    "question": "¿Cuáles son los valores principales de la organización según el manual de bienvenida?",
+    "expected": "Soberanía del dato, excelencia académica e innovación en IA",
+    "response": "Según el archivo documentos_RRHH_01_Manual_Bienvenida.docx, trata sobre los siguientes valores:\n\n- Soberanía del dato y privacidad estructural.\n- Excelencia académica y rigor en ingeniería del software.\n- Innovación continua en Inteligencia Artificial y gobernanza.",
+    "metadata": [
+      {
+        "id": 20,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 26,
+        "file_name": "documentos_RRHH_04_Guia_Desempeno.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 23,
+        "file_name": "documentos_RRHH_03_Protocolo_Teletrabajo.pdf",
+        "security": "Público"
+      },
+      {
+        "id": 24,
+        "file_name": "documentos_RRHH_03_Protocolo_Teletrabajo.pdf",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "RRHH",
+    "elapsed_seconds": 111.3,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-10",
+    "bloque": "C-RRHH-std",
+    "question": "¿A través de qué canal puede un empleado nuevo canalizar sus dudas iniciales?",
+    "expected": "Oficina virtual de RRHH o correo institucional interno",
+    "response": "Según el archivo documentos_RRHH_01_Manual_Bienvenida.docx, cualquier duda inicial puede canalizarse a través de la oficina virtual de Recursos Humanos o mediante el correo institucional interno administrado en nuestros servidores locales.",
+    "metadata": [
+      {
+        "id": 21,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 20,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 26,
+        "file_name": "documentos_RRHH_04_Guia_Desempeno.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 25,
+        "file_name": "documentos_RRHH_04_Guia_Desempeno.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 23,
+        "file_name": "documentos_RRHH_03_Protocolo_Teletrabajo.pdf",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "RRHH",
+    "elapsed_seconds": 51.1,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-11",
+    "bloque": "C-RRHH-std",
+    "question": "¿Con qué frecuencia deben entregarse los partes de confirmación durante una baja?",
+    "expected": "Cada 7 días",
+    "response": "Según el archivo documentos_RRHH_02_Politica_Horarios.txt, trata sobre política de horarios flexibles y conciliación.",
+    "metadata": [
+      {
+        "id": 20,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 26,
+        "file_name": "documentos_RRHH_04_Guia_Desempeno.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 21,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 22,
+        "file_name": "documentos_RRHH_02_Politica_Horarios.txt",
+        "security": "Público"
+      },
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "RRHH",
+    "elapsed_seconds": 156.1,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-12",
+    "bloque": "C-RRHH-std",
+    "question": "¿En qué plazo debe notificarse una baja laboral?",
+    "expected": "Máximo 24 horas desde la emisión del parte médico",
+    "response": "Según el archivo documentos_RRHH_01_Manual_Bienvenida.docx, trata sobre un Manual de Bienvenida e Inducción de Personal. Sin embargo, no se menciona nada relacionado con la notificación de bajas laborales.\n\nSin embargo, en el archivo documentos_RRHH_03_Protocolo_Teletrabajo.pdf, se menciona que debido a los estrictos requisitos de soberanía de datos del centro, el acceso remoto está estrictamente regulado. Pero no se menciona nada relacionado con la notificación de bajas laborales.\n\nEs posible que la información solicitada esté en otro documento o contexto.",
+    "metadata": [
+      {
+        "id": 22,
+        "file_name": "documentos_RRHH_02_Politica_Horarios.txt",
+        "security": "Público"
+      },
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 20,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 23,
+        "file_name": "documentos_RRHH_03_Protocolo_Teletrabajo.pdf",
+        "security": "Público"
+      },
+      {
+        "id": 28,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "RRHH",
+    "elapsed_seconds": 77.0,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-13",
+    "bloque": "D-RRHH-high",
+    "question": "¿Cuál es la banda salarial de un Investigador Principal?",
+    "expected": "55.000 EUR - 75.000 EUR",
+    "response": "Según el archivo documentos_RRHH_05_Estructura_Salarial.pdf, trata sobre que la banda salarial bruta anual para un Investigador Principal / Doctor en Informática (Rol: admin) es de 55.000 EUR a 75.000 EUR.",
+    "metadata": [
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 274,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 33,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 252,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 285,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 22,
+        "file_name": "documentos_RRHH_02_Politica_Horarios.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "RRHH",
+    "elapsed_seconds": 118.7,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-14",
+    "bloque": "D-RRHH-high",
+    "question": "¿Cuál es la banda salarial de un Ingeniero de Software Senior?",
+    "expected": "42.000 EUR - 54.000 EUR",
+    "response": "Según el archivo documentos_RRHH_05_Estructura_Salarial.pdf, trata sobre la banda salarial de un Ingeniero de Software Senior / Especialista RAG (Rol: dept_high), que asciende entre 42.000 EUR y 54.000 EUR.",
+    "metadata": [
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 274,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 285,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 252,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 33,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 28,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "RRHH",
+    "elapsed_seconds": 100.3,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-15",
+    "bloque": "D-RRHH-high",
+    "question": "¿Cuándo se realizan las revisiones salariales?",
+    "expected": "Cada mes de diciembre",
+    "response": "Según el archivo documentos_RRHH_05_Estructura_Salarial.pdf, las revisiones salariales se realizarán de manera asíncrona cada mes de diciembre considerando las métricas de rendimiento extraídas del sistema analítico local.",
+    "metadata": [
+      {
+        "id": 28,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 274,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 26,
+        "file_name": "documentos_RRHH_04_Guia_Desempeno.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 326,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 361,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "RRHH",
+    "elapsed_seconds": 187.4,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-16",
+    "bloque": "D-RRHH-high",
+    "question": "¿A partir de qué día asume la Seguridad Social el pago directo en una baja?",
+    "expected": "A partir del día 21",
+    "response": "Según el archivo documentos_RRHH_08_Protocolo_Bajas.txt, trata sobre que a partir del día 21, la Seguridad Social asume el pago directo.",
+    "metadata": [
+      {
+        "id": 34,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 33,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 285,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 320,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 263,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "RRHH",
+    "elapsed_seconds": 112.2,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-17",
+    "bloque": "E-admin",
+    "question": "¿Cuál es la dieta máxima diaria nacional para viajes?",
+    "expected": "45 EUR",
+    "response": "Según el archivo documentos_ADM_02_Guia_Dietas.docx, trata sobre la Guía de Procedimientos para la Solicitud de Dietas. Sin embargo, no se menciona una \"dieta máxima diaria nacional\" específica en el texto proporcionado.",
+    "metadata": [
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 229,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 22,
+        "file_name": "documentos_RRHH_02_Politica_Horarios.txt",
+        "security": "Público"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "admin",
+    "dept": "Administración",
+    "elapsed_seconds": 59.2,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-18",
+    "bloque": "E-admin",
+    "question": "¿Cuál es la banda salarial de un Ingeniero de Datos Junior?",
+    "expected": "28.000 EUR - 38.000 EUR",
+    "response": "Según el archivo documentos_RRHH_05_Estructura_Salarial.pdf, no se menciona específicamente la banda salarial para un Ingeniero de Datos Junior. Sin embargo, se mencionan las bandas salariales para los siguientes roles:\n\n* Investigador Principal / Doctor en Informática: 55.000 EUR - 75.000 EUR\n* Ingeniero de Software Senior / Especialista RAG: 42.000 EUR - 54.000 EUR\n\nNo hay información sobre la banda salarial para un Ingeniero de Datos Junior.",
+    "metadata": [
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 274,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 285,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 105,
+        "file_name": "documentos_extensos_ADM_10_Pliego_Prescripciones_Tecnicas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 252,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 33,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "admin",
+    "dept": "RRHH (cross-dpto)",
+    "elapsed_seconds": 71.4,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-19",
+    "bloque": "E-admin",
+    "question": "¿Qué parámetros HNSW se usan en el índice vectorial según el plan estratégico?",
+    "expected": "m=16 y ef_construction=64",
+    "response": "Según el archivo documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf, trata sobre los parámetros m=16 y ef_construction=64 para la calibración del índice HNSW en el procesamiento vectorial.",
+    "metadata": [
+      {
+        "id": 321,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 333,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 339,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 356,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 367,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 373,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "admin",
+    "dept": "Administración",
+    "elapsed_seconds": 138.9,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-20",
+    "bloque": "E-admin",
+    "question": "¿Qué porcentaje de la base reguladora abona la empresa entre el día 4 y 20 de una baja?",
+    "expected": "60% de la base reguladora",
+    "response": "Según el archivo documentos_RRHH_08_Protocolo_Bajas.txt, trata sobre que la empresa abona el 60% de la base reguladora durante los días 4 al 20 de una baja.",
+    "metadata": [
+      {
+        "id": 34,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 33,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 13,
+        "file_name": "documentos_ADM_04_Protocolo_Reuniones.txt",
+        "security": "Público"
+      },
+      {
+        "id": 58,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 70,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 190,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "admin",
+    "dept": "RRHH (cross-dpto)",
+    "elapsed_seconds": 192.8,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-21",
+    "bloque": "F-cross-dpto",
+    "question": "¿Cuál es la banda salarial de un Investigador Principal?",
+    "expected": "RLS DENEGADO",
+    "response": "Según el archivo documentos_ADM_07_Contrato_Infraestructura.docx, trata sobre penalizaciones por incumplimiento del contrato. No se menciona información específica sobre la banda salarial de un Investigador Principal.",
+    "metadata": [
+      {
+        "id": 17,
+        "file_name": "documentos_ADM_07_Contrato_Infraestructura.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 10,
+        "file_name": "documentos_ADM_04_Acta_Presupuestos.docx",
+        "security": "Público"
+      },
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 18,
+        "file_name": "documentos_ADM_08_Auditoria_Riesgos.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "ADM→RRHH",
+    "elapsed_seconds": 299.7,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-22",
+    "bloque": "F-cross-dpto",
+    "question": "¿Cuál es el fondo de reserva para contingencias de ciberseguridad?",
+    "expected": "RLS DENEGADO",
+    "response": "Según el archivo documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx, trata sobre políticas de empleo, igualdad de trato y régimen disciplinario interno.",
+    "metadata": [
+      {
+        "id": 298,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 23,
+        "file_name": "documentos_RRHH_03_Protocolo_Teletrabajo.pdf",
+        "security": "Público"
+      },
+      {
+        "id": 20,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 279,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 257,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 268,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "RRHH→ADM",
+    "elapsed_seconds": 232.8,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-23",
+    "bloque": "G-expirado",
+    "question": "¿Cuáles son las fechas del calendario fiscal?",
+    "expected": "SIN RESULTADO: doc expirado 2026-01-01",
+    "response": "Según el archivo documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt, trata sobre vacaciones y se mencionan los siguientes periodos:\n\n* El periodo de solicitud de vacaciones debe presentarse con un mínimo de 15 días de antelación.\n* Los meses de julio y agosto se consideran periodos preferentes. Las solicitudes para estos meses deben presentarse antes del 30 de abril de cada año.\n\nNo se mencionan fechas específicas del calendario fiscal, pero se hace referencia a un ejercicio fiscal que comienza en el año 2028.",
+    "metadata": [
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 12,
+        "file_name": "documentos_ADM_04_Protocolo_Reuniones.txt",
+        "security": "Público"
+      },
+      {
+        "id": 82,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 6,
+        "file_name": "documentos_ADM_03_Control_Gastos.pdf",
+        "security": "Público"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "admin",
+    "dept": "Administración",
+    "elapsed_seconds": 297.4,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-24",
+    "bloque": "G-vigente",
+    "question": "¿Cuál es el protocolo de vacaciones vigente?",
+    "expected": "Respuesta válida (doc vigente hasta 2026-12-31)",
+    "response": "Según el archivo documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt, trata sobre el Protocolo de Gestión de Vacaciones - Departamento de Administración.",
+    "metadata": [
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 174,
+        "file_name": "documentos_extensos_ADM_10_Pliego_Prescripciones_Tecnicas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 105,
+        "file_name": "documentos_extensos_ADM_10_Pliego_Prescripciones_Tecnicas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 263,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "admin",
+    "dept": "Administración",
+    "elapsed_seconds": 76.5,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-25",
+    "bloque": "H-sin-respuesta",
+    "question": "¿Cuál es la política de stock options de la empresa?",
+    "expected": "No debe alucinar",
+    "response": "Según el archivo documentos_ADM_04_Acta_Presupuestos.docx, trata sobre Acta de la Junta de Presupuestos y Adquisiciones de Hardware. No se menciona información relacionada con la política de stock options.",
+    "metadata": [
+      {
+        "id": 285,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 227,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 10,
+        "file_name": "documentos_ADM_04_Acta_Presupuestos.docx",
+        "security": "Público"
+      },
+      {
+        "id": 190,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 201,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 297,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "admin",
+    "dept": "N/A",
+    "elapsed_seconds": 64.6,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-26",
+    "bloque": "H-sin-respuesta",
+    "question": "¿Qué herramientas de IA usa el departamento de marketing?",
+    "expected": "No debe inventar departamentos",
+    "response": "Según el archivo documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx, trata sobre la exportación de registros salariales, datos de contratación o historiales médicos a repositorios públicos o herramientas de IA de terceros basadas en la nube.",
+    "metadata": [
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 34,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 33,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 309,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 332,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 253,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "N/A",
+    "elapsed_seconds": 228.7,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-27",
+    "bloque": "I-confidencial",
+    "question": "¿Cuál es el valor de los activos corrientes en el cierre Q1 2026?",
+    "expected": "SIN RESULTADO: no ve Confidencial",
+    "response": "Según el archivo documentos_ADM_06_Balance_Contable.pdf, trata sobre que los Activos Corrientes ascienden a 450.000 EUR.",
+    "metadata": [
+      {
+        "id": 15,
+        "file_name": "documentos_ADM_06_Balance_Contable.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 17,
+        "file_name": "documentos_ADM_07_Contrato_Infraestructura.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 18,
+        "file_name": "documentos_ADM_08_Auditoria_Riesgos.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 6,
+        "file_name": "documentos_ADM_03_Control_Gastos.pdf",
+        "security": "Público"
+      },
+      {
+        "id": 12,
+        "file_name": "documentos_ADM_04_Protocolo_Reuniones.txt",
+        "security": "Público"
+      },
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "Administración",
+    "elapsed_seconds": 63.3,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-28",
+    "bloque": "I-confidencial",
+    "question": "¿Cuál es la banda salarial de un Investigador Principal?",
+    "expected": "SIN RESULTADO: no ve Confidencial",
+    "response": "Según el archivo documentos_RRHH_05_Estructura_Salarial.pdf, trata sobre que la banda salarial bruta anual asignada a los perfiles de la organización. El rol de \"Investigador Principal / Doctor en Informática\" tiene una banda salarial de 55.000 EUR - 75.000 EUR.",
+    "metadata": [
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 22,
+        "file_name": "documentos_RRHH_02_Politica_Horarios.txt",
+        "security": "Público"
+      },
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 28,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 20,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 25,
+        "file_name": "documentos_RRHH_04_Guia_Desempeno.docx",
+        "security": "Interno"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "RRHH",
+    "elapsed_seconds": 110.2,
+    "status": "ok",
+    "model": "llama3.1:8b",
+    "ronda": "R1-llama31-8b"
+  },
+  {
+    "id": "GS-01",
+    "bloque": "A-ADM-std",
+    "question": "¿Cuál es la cuantía máxima autorizada para alojamiento en viajes?",
+    "expected": "110 EUR por noche",
+    "response": "No se proporciona información sobre la cuantía máxima autorizada para alojamiento en viajes.",
+    "metadata": [
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 11,
+        "file_name": "documentos_ADM_04_Acta_Presupuestos.docx",
+        "security": "Público"
+      },
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 13,
+        "file_name": "documentos_ADM_04_Protocolo_Reuniones.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "Administración",
+    "elapsed_seconds": 52.7,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-02",
+    "bloque": "A-ADM-std",
+    "question": "¿Cuál es la dieta máxima diaria para viajes internacionales?",
+    "expected": "75 EUR",
+    "response": "Según el archivo documentos_ADM_02_Guia_Dietas.docx, la dieta máxima diaria para viajes internacionales es de 75 EUR.",
+    "metadata": [
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 4,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 18,
+        "file_name": "documentos_ADM_08_Auditoria_Riesgos.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "Administración",
+    "elapsed_seconds": 43.7,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-03",
+    "bloque": "A-ADM-std",
+    "question": "¿Cuántos días de antelación mínima se requieren para solicitar vacaciones?",
+    "expected": "15 días de antelación",
+    "response": "Según el archivo documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt, las solicitudes de vacaciones deben presentarse con un mínimo de 15 días de antelación.",
+    "metadata": [
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 5,
+        "file_name": "documentos_ADM_03_Control_Gastos.pdf",
+        "security": "Público"
+      },
+      {
+        "id": 11,
+        "file_name": "documentos_ADM_04_Acta_Presupuestos.docx",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "Administración",
+    "elapsed_seconds": 46.5,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-04",
+    "bloque": "A-ADM-std",
+    "question": "¿Cuál es el periodo mínimo de días consecutivos en vacaciones fraccionadas?",
+    "expected": "5 días laborables consecutivos",
+    "response": "Según el archivo documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt, el periodo mínimo de días consecutivos en vacaciones fraccionadas es de 5 días laborables.",
+    "metadata": [
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 12,
+        "file_name": "documentos_ADM_04_Protocolo_Reuniones.txt",
+        "security": "Público"
+      },
+      {
+        "id": 17,
+        "file_name": "documentos_ADM_07_Contrato_Infraestructura.docx",
+        "security": "Interno"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "Administración",
+    "elapsed_seconds": 41.6,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-05",
+    "bloque": "B-ADM-high",
+    "question": "¿Cuál es el valor de los activos corrientes en el cierre Q1 2026?",
+    "expected": "450.000 EUR",
+    "response": "Según el archivo documentos_ADM_06_Balance_Contable.pdf, los activos corrientes en el cierre Q1 2026 son de 450.000 EUR.",
+    "metadata": [
+      {
+        "id": 93,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 15,
+        "file_name": "documentos_ADM_06_Balance_Contable.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 35,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 80,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 17,
+        "file_name": "documentos_ADM_07_Contrato_Infraestructura.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 52,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "Administración",
+    "elapsed_seconds": 45.2,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-06",
+    "bloque": "B-ADM-high",
+    "question": "¿Cuánto se ha invertido en proyectos de IA locales?",
+    "expected": "85.000 EUR",
+    "response": "No se proporciona información sobre la cantidad invertida en proyectos de IA locales.",
+    "metadata": [
+      {
+        "id": 190,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 11,
+        "file_name": "documentos_ADM_04_Acta_Presupuestos.docx",
+        "security": "Público"
+      },
+      {
+        "id": 216,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 105,
+        "file_name": "documentos_extensos_ADM_10_Pliego_Prescripciones_Tecnicas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 89,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 78,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "Administración",
+    "elapsed_seconds": 47.0,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-07",
+    "bloque": "B-ADM-high",
+    "question": "¿Cuál es el fondo de reserva para contingencias de ciberseguridad?",
+    "expected": "50.000 EUR",
+    "response": "No se menciona explícitamente en los documentos proporcionados.",
+    "metadata": [
+      {
+        "id": 58,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 35,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 190,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 17,
+        "file_name": "documentos_ADM_07_Contrato_Infraestructura.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 12,
+        "file_name": "documentos_ADM_04_Protocolo_Reuniones.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "Administración",
+    "elapsed_seconds": 45.4,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-08",
+    "bloque": "B-ADM-high",
+    "question": "¿Cuál es el umbral crítico de tiempo de búsqueda vectorial definido en el plan estratégico?",
+    "expected": "50 milisegundos por query",
+    "response": "Según el archivo documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf, el umbral crítico de tiempo de búsqueda vectorial es de 50 segundos.",
+    "metadata": [
+      {
+        "id": 48,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 100,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 40,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 56,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 50,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 38,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "Administración",
+    "elapsed_seconds": 62.4,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-09",
+    "bloque": "C-RRHH-std",
+    "question": "¿Cuáles son los valores principales de la organización según el manual de bienvenida?",
+    "expected": "Soberanía del dato, excelencia académica e innovación en IA",
+    "response": "Según el archivo documentos_RRHH_01_Manual_Bienvenida.docx, los valores principales de la organización son:\n\n1. Soberanía del dato y privacidad estructural.\n2. Excelencia académica y rigor en ingeniería del software.\n3. Innovación continua en Inteligencia Artificial y gobernanza.",
+    "metadata": [
+      {
+        "id": 20,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 26,
+        "file_name": "documentos_RRHH_04_Guia_Desempeno.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 23,
+        "file_name": "documentos_RRHH_03_Protocolo_Teletrabajo.pdf",
+        "security": "Público"
+      },
+      {
+        "id": 24,
+        "file_name": "documentos_RRHH_03_Protocolo_Teletrabajo.pdf",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "RRHH",
+    "elapsed_seconds": 45.7,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-10",
+    "bloque": "C-RRHH-std",
+    "question": "¿A través de qué canal puede un empleado nuevo canalizar sus dudas iniciales?",
+    "expected": "Oficina virtual de RRHH o correo institucional interno",
+    "response": "Según el archivo documentos_RRHH_01_Manual_Bienvenida.docx, cualquier duda inicial puede canalizarse a través de la oficina virtual de Recursos Humanos o mediante el correo institucional interno administrado en nuestros servidores locales.",
+    "metadata": [
+      {
+        "id": 21,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 20,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 26,
+        "file_name": "documentos_RRHH_04_Guia_Desempeno.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 25,
+        "file_name": "documentos_RRHH_04_Guia_Desempeno.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 23,
+        "file_name": "documentos_RRHH_03_Protocolo_Teletrabajo.pdf",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "RRHH",
+    "elapsed_seconds": 25.8,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-11",
+    "bloque": "C-RRHH-std",
+    "question": "¿Con qué frecuencia deben entregarse los partes de confirmación durante una baja?",
+    "expected": "Cada 7 días",
+    "response": "No se proporciona información sobre la frecuencia de entrega de partes de confirmación durante una baja en el documento recuperado.",
+    "metadata": [
+      {
+        "id": 20,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 26,
+        "file_name": "documentos_RRHH_04_Guia_Desempeno.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 21,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 22,
+        "file_name": "documentos_RRHH_02_Politica_Horarios.txt",
+        "security": "Público"
+      },
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "RRHH",
+    "elapsed_seconds": 26.6,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-12",
+    "bloque": "C-RRHH-std",
+    "question": "¿En qué plazo debe notificarse una baja laboral?",
+    "expected": "Máximo 24 horas desde la emisión del parte médico",
+    "response": "No se proporciona información sobre el plazo para notificar una baja laboral en los documentos recuperados.",
+    "metadata": [
+      {
+        "id": 22,
+        "file_name": "documentos_RRHH_02_Politica_Horarios.txt",
+        "security": "Público"
+      },
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 20,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 23,
+        "file_name": "documentos_RRHH_03_Protocolo_Teletrabajo.pdf",
+        "security": "Público"
+      },
+      {
+        "id": 28,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "RRHH",
+    "elapsed_seconds": 43.2,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-13",
+    "bloque": "D-RRHH-high",
+    "question": "¿Cuál es la banda salarial de un Investigador Principal?",
+    "expected": "55.000 EUR - 75.000 EUR",
+    "response": "Según el archivo documentos_RRHH_05_Estructura_Salarial.pdf, la banda salarial bruta anual para un Investigador Principal / Doctor en Informática (Rol: admin) es de 55.000 EUR a 75.000 EUR.",
+    "metadata": [
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 274,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 33,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 252,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 285,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 22,
+        "file_name": "documentos_RRHH_02_Politica_Horarios.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "RRHH",
+    "elapsed_seconds": 48.6,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-14",
+    "bloque": "D-RRHH-high",
+    "question": "¿Cuál es la banda salarial de un Ingeniero de Software Senior?",
+    "expected": "42.000 EUR - 54.000 EUR",
+    "response": "Según el archivo documentos_RRHH_05_Estructura_Salarial.pdf, la banda salarial de un Ingeniero de Software Senior / Especialista RAG es de 42.000 EUR - 54.000 EUR.",
+    "metadata": [
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 274,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 285,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 252,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 33,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 28,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "RRHH",
+    "elapsed_seconds": 30.5,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-15",
+    "bloque": "D-RRHH-high",
+    "question": "¿Cuándo se realizan las revisiones salariales?",
+    "expected": "Cada mes de diciembre",
+    "response": "Según el archivo documentos_RRHH_05_Estructura_Salarial.pdf, las revisiones salariales se realizarán de manera asíncrona cada mes de diciembre.",
+    "metadata": [
+      {
+        "id": 28,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 274,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 26,
+        "file_name": "documentos_RRHH_04_Guia_Desempeno.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 326,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 361,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "RRHH",
+    "elapsed_seconds": 52.2,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-16",
+    "bloque": "D-RRHH-high",
+    "question": "¿A partir de qué día asume la Seguridad Social el pago directo en una baja?",
+    "expected": "A partir del día 21",
+    "response": "Según el archivo documentos_RRHH_08_Protocolo_Bajas.txt, a partir del día 21 de baja, la Seguridad Social asume el pago directo.",
+    "metadata": [
+      {
+        "id": 34,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 33,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 285,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 320,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 263,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "RRHH",
+    "elapsed_seconds": 39.0,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-17",
+    "bloque": "E-admin",
+    "question": "¿Cuál es la dieta máxima diaria nacional para viajes?",
+    "expected": "45 EUR",
+    "response": "No se proporciona información sobre dietas máximas diarias nacionales para viajes.",
+    "metadata": [
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 229,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 22,
+        "file_name": "documentos_RRHH_02_Politica_Horarios.txt",
+        "security": "Público"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "admin",
+    "dept": "Administración",
+    "elapsed_seconds": 40.3,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-18",
+    "bloque": "E-admin",
+    "question": "¿Cuál es la banda salarial de un Ingeniero de Datos Junior?",
+    "expected": "28.000 EUR - 38.000 EUR",
+    "response": "No se menciona explícitamente la banda salarial del Ingeniero de Datos Junior en los documentos proporcionados. Sin embargo, se mencionan las bandas salariales brutas anuales para otros roles, como Investigador Principal / Doctor en Informática (Rol: admin) y Ingeniero de Software Senior / Especialista RAG (Rol: dept_high).",
+    "metadata": [
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 274,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 285,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 105,
+        "file_name": "documentos_extensos_ADM_10_Pliego_Prescripciones_Tecnicas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 252,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 33,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "admin",
+    "dept": "RRHH (cross-dpto)",
+    "elapsed_seconds": 46.4,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-19",
+    "bloque": "E-admin",
+    "question": "¿Qué parámetros HNSW se usan en el índice vectorial según el plan estratégico?",
+    "expected": "m=16 y ef_construction=64",
+    "response": "Según el archivo documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf, se utilizan los siguientes parámetros HNSW: m=16 y ef_construction=64.",
+    "metadata": [
+      {
+        "id": 321,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 333,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 339,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 356,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 367,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 373,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "admin",
+    "dept": "Administración",
+    "elapsed_seconds": 60.4,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-20",
+    "bloque": "E-admin",
+    "question": "¿Qué porcentaje de la base reguladora abona la empresa entre el día 4 y 20 de una baja?",
+    "expected": "60% de la base reguladora",
+    "response": "Según el archivo documentos_RRHH_08_Protocolo_Bajas.txt, la empresa abona el 60% de la base reguladora entre el día 4 y 20 de una baja.",
+    "metadata": [
+      {
+        "id": 34,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 33,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 13,
+        "file_name": "documentos_ADM_04_Protocolo_Reuniones.txt",
+        "security": "Público"
+      },
+      {
+        "id": 58,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 70,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 190,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "admin",
+    "dept": "RRHH (cross-dpto)",
+    "elapsed_seconds": 52.0,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-21",
+    "bloque": "F-cross-dpto",
+    "question": "¿Cuál es la banda salarial de un Investigador Principal?",
+    "expected": "RLS DENEGADO",
+    "response": "No se proporciona información sobre la banda salarial de un investigador principal.",
+    "metadata": [
+      {
+        "id": 17,
+        "file_name": "documentos_ADM_07_Contrato_Infraestructura.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 10,
+        "file_name": "documentos_ADM_04_Acta_Presupuestos.docx",
+        "security": "Público"
+      },
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 18,
+        "file_name": "documentos_ADM_08_Auditoria_Riesgos.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "ADM→RRHH",
+    "elapsed_seconds": 38.6,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-22",
+    "bloque": "F-cross-dpto",
+    "question": "¿Cuál es el fondo de reserva para contingencias de ciberseguridad?",
+    "expected": "RLS DENEGADO",
+    "response": "No se proporciona información sobre un fondo de reserva para contingencias de ciberseguridad en los documentos proporcionados.",
+    "metadata": [
+      {
+        "id": 298,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 23,
+        "file_name": "documentos_RRHH_03_Protocolo_Teletrabajo.pdf",
+        "security": "Público"
+      },
+      {
+        "id": 20,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 279,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 257,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 268,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "RRHH→ADM",
+    "elapsed_seconds": 56.7,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-23",
+    "bloque": "G-expirado",
+    "question": "¿Cuáles son las fechas del calendario fiscal?",
+    "expected": "SIN RESULTADO: doc expirado 2026-01-01",
+    "response": "No se proporciona información sobre fechas específicas del calendario fiscal.",
+    "metadata": [
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 12,
+        "file_name": "documentos_ADM_04_Protocolo_Reuniones.txt",
+        "security": "Público"
+      },
+      {
+        "id": 82,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 6,
+        "file_name": "documentos_ADM_03_Control_Gastos.pdf",
+        "security": "Público"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "admin",
+    "dept": "Administración",
+    "elapsed_seconds": 42.1,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-24",
+    "bloque": "G-vigente",
+    "question": "¿Cuál es el protocolo de vacaciones vigente?",
+    "expected": "Respuesta válida (doc vigente hasta 2026-12-31)",
+    "response": "Según el archivo documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt, el periodo ordinario de vacaciones es de 22 días laborables anuales según el convenio colectivo vigente.",
+    "metadata": [
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 174,
+        "file_name": "documentos_extensos_ADM_10_Pliego_Prescripciones_Tecnicas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 105,
+        "file_name": "documentos_extensos_ADM_10_Pliego_Prescripciones_Tecnicas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 263,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "admin",
+    "dept": "Administración",
+    "elapsed_seconds": 38.5,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-25",
+    "bloque": "H-sin-respuesta",
+    "question": "¿Cuál es la política de stock options de la empresa?",
+    "expected": "No debe alucinar",
+    "response": "No se proporciona información sobre la política de stock options en los documentos recuperados.",
+    "metadata": [
+      {
+        "id": 285,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 227,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 10,
+        "file_name": "documentos_ADM_04_Acta_Presupuestos.docx",
+        "security": "Público"
+      },
+      {
+        "id": 190,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 201,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 297,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "admin",
+    "dept": "N/A",
+    "elapsed_seconds": 22.6,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-26",
+    "bloque": "H-sin-respuesta",
+    "question": "¿Qué herramientas de IA usa el departamento de marketing?",
+    "expected": "No debe inventar departamentos",
+    "response": "No hay información disponible sobre la utilización de herramientas de IA por parte del departamento de marketing.",
+    "metadata": [
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 34,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 33,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 309,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 332,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 253,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "N/A",
+    "elapsed_seconds": 44.9,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-27",
+    "bloque": "I-confidencial",
+    "question": "¿Cuál es el valor de los activos corrientes en el cierre Q1 2026?",
+    "expected": "SIN RESULTADO: no ve Confidencial",
+    "response": "Según el archivo documentos_ADM_06_Balance_Contable.pdf, los activos corrientes en el cierre Q1 2026 son de 450.000 EUR.",
+    "metadata": [
+      {
+        "id": 15,
+        "file_name": "documentos_ADM_06_Balance_Contable.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 17,
+        "file_name": "documentos_ADM_07_Contrato_Infraestructura.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 18,
+        "file_name": "documentos_ADM_08_Auditoria_Riesgos.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 6,
+        "file_name": "documentos_ADM_03_Control_Gastos.pdf",
+        "security": "Público"
+      },
+      {
+        "id": 12,
+        "file_name": "documentos_ADM_04_Protocolo_Reuniones.txt",
+        "security": "Público"
+      },
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "Administración",
+    "elapsed_seconds": 47.7,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-28",
+    "bloque": "I-confidencial",
+    "question": "¿Cuál es la banda salarial de un Investigador Principal?",
+    "expected": "SIN RESULTADO: no ve Confidencial",
+    "response": "Según el archivo documentos_RRHH_05_Estructura_Salarial.pdf, la banda salarial de un Investigador Principal (Rol: admin) es de 55.000 EUR a 75.000 EUR.",
+    "metadata": [
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 22,
+        "file_name": "documentos_RRHH_02_Politica_Horarios.txt",
+        "security": "Público"
+      },
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 28,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 20,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 25,
+        "file_name": "documentos_RRHH_04_Guia_Desempeno.docx",
+        "security": "Interno"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "RRHH",
+    "elapsed_seconds": 42.0,
+    "status": "ok",
+    "model": "llama3.2:3b",
+    "ronda": "R2-llama32-3b"
+  },
+  {
+    "id": "GS-01",
+    "bloque": "A-ADM-std",
+    "question": "¿Cuál es la cuantía máxima autorizada para alojamiento en viajes?",
+    "expected": "110 EUR por noche",
+    "response": "Según el documento documentos_ADM_02_Guia_Dietas.docx, no se especifica una cuantía máxima autorizada para alojamiento en viajes. La guía regula el procedimiento para la solicitud de dietas y viajes relacionados con asistencia a congresos internacionales de Inteligencia Artificial y Ciberseguridad, pero no incluye detalles sobre los costos máximos permitidos para el alojamiento.",
+    "metadata": [
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 11,
+        "file_name": "documentos_ADM_04_Acta_Presupuestos.docx",
+        "security": "Público"
+      },
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 13,
+        "file_name": "documentos_ADM_04_Protocolo_Reuniones.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "Administración",
+    "elapsed_seconds": 120.2,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-02",
+    "bloque": "A-ADM-std",
+    "question": "¿Cuál es la dieta máxima diaria para viajes internacionales?",
+    "expected": "75 EUR",
+    "response": "Según el documento documentos_ADM_02_Guia_Dietas.docx, la dieta máxima diaria para viajes internacionales es de 75 EUR.",
+    "metadata": [
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 4,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 18,
+        "file_name": "documentos_ADM_08_Auditoria_Riesgos.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "Administración",
+    "elapsed_seconds": 92.5,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-03",
+    "bloque": "A-ADM-std",
+    "question": "¿Cuántos días de antelación mínima se requieren para solicitar vacaciones?",
+    "expected": "15 días de antelación",
+    "response": "Según el documento documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt, las solicitudes de vacaciones deben presentarse con un mínimo de 15 días de antelación a través del sistema corporativo de RRHH.",
+    "metadata": [
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 5,
+        "file_name": "documentos_ADM_03_Control_Gastos.pdf",
+        "security": "Público"
+      },
+      {
+        "id": 11,
+        "file_name": "documentos_ADM_04_Acta_Presupuestos.docx",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "Administración",
+    "elapsed_seconds": 100.5,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-04",
+    "bloque": "A-ADM-std",
+    "question": "¿Cuál es el periodo mínimo de días consecutivos en vacaciones fraccionadas?",
+    "expected": "5 días laborables consecutivos",
+    "response": "Según el documento documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt, trata sobre un periodo mínimo de 5 días laborables consecutivos para las vacaciones fraccionadas.",
+    "metadata": [
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 12,
+        "file_name": "documentos_ADM_04_Protocolo_Reuniones.txt",
+        "security": "Público"
+      },
+      {
+        "id": 17,
+        "file_name": "documentos_ADM_07_Contrato_Infraestructura.docx",
+        "security": "Interno"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "Administración",
+    "elapsed_seconds": 86.9,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-05",
+    "bloque": "B-ADM-high",
+    "question": "¿Cuál es el valor de los activos corrientes en el cierre Q1 2026?",
+    "expected": "450.000 EUR",
+    "response": "Según el documento documentos_ADM_06_Balance_Contable.pdf, los activos corrientes en el cierre Q1 2026 son de 450.000 EUR.",
+    "metadata": [
+      {
+        "id": 93,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 15,
+        "file_name": "documentos_ADM_06_Balance_Contable.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 35,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 80,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 17,
+        "file_name": "documentos_ADM_07_Contrato_Infraestructura.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 52,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "Administración",
+    "elapsed_seconds": 99.7,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-06",
+    "bloque": "B-ADM-high",
+    "question": "¿Cuánto se ha invertido en proyectos de IA locales?",
+    "expected": "85.000 EUR",
+    "response": "Según el archivo documentos_extensos_ADM_10_Pliego_Prescripciones_Tecnicas.txt, trata sobre la adquisición de equipamiento informático y licencias de software para el despliegue del sistema RAG institucional en un entorno 100% on-premise. Sin embargo, no se especifica una cantidad específica de inversión en proyectos de IA locales.",
+    "metadata": [
+      {
+        "id": 190,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 11,
+        "file_name": "documentos_ADM_04_Acta_Presupuestos.docx",
+        "security": "Público"
+      },
+      {
+        "id": 216,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 105,
+        "file_name": "documentos_extensos_ADM_10_Pliego_Prescripciones_Tecnicas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 89,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 78,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "Administración",
+    "elapsed_seconds": 111.7,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-07",
+    "bloque": "B-ADM-high",
+    "question": "¿Cuál es el fondo de reserva para contingencias de ciberseguridad?",
+    "expected": "50.000 EUR",
+    "response": "Según el archivo documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf, trata sobre el fondo de inversión plurianual destinado a mitigar la dependencia de proveedores cloud externos y no menciona un fondo de reserva específico para contingencias de ciberseguridad.",
+    "metadata": [
+      {
+        "id": 58,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 35,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 190,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 17,
+        "file_name": "documentos_ADM_07_Contrato_Infraestructura.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 12,
+        "file_name": "documentos_ADM_04_Protocolo_Reuniones.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "Administración",
+    "elapsed_seconds": 103.2,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-08",
+    "bloque": "B-ADM-high",
+    "question": "¿Cuál es el umbral crítico de tiempo de búsqueda vectorial definido en el plan estratégico?",
+    "expected": "50 milisegundos por query",
+    "response": "Según el documento documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf, el umbral crítico de tiempo de búsqueda se define como 50 segundos.",
+    "metadata": [
+      {
+        "id": 48,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 100,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 40,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 56,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 50,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 38,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "Administración",
+    "elapsed_seconds": 129.5,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-09",
+    "bloque": "C-RRHH-std",
+    "question": "¿Cuáles son los valores principales de la organización según el manual de bienvenida?",
+    "expected": "Soberanía del dato, excelencia académica e innovación en IA",
+    "response": "Según el documento Manual de Bienvenida e Inducción de Personal [documentos_RRHH_01_Manual_Bienvenida.docx], los valores principales de la Organización son:\n- Soberanía del dato y privacidad estructural.\n- Excelencia académica y rigor en ingeniería del software.\n- Innovación continua en Inteligencia Artificial y gobernanza.",
+    "metadata": [
+      {
+        "id": 20,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 26,
+        "file_name": "documentos_RRHH_04_Guia_Desempeno.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 23,
+        "file_name": "documentos_RRHH_03_Protocolo_Teletrabajo.pdf",
+        "security": "Público"
+      },
+      {
+        "id": 24,
+        "file_name": "documentos_RRHH_03_Protocolo_Teletrabajo.pdf",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "RRHH",
+    "elapsed_seconds": 96.9,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-10",
+    "bloque": "C-RRHH-std",
+    "question": "¿A través de qué canal puede un empleado nuevo canalizar sus dudas iniciales?",
+    "expected": "Oficina virtual de RRHH o correo institucional interno",
+    "response": "Según el documento documentos_RRHH_01_Manual_Bienvenida.docx, cualquier duda inicial puede canalizarse a través de la oficina virtual de Recursos Humanos o mediante el correo institucional interno administrado en los servidores locales.",
+    "metadata": [
+      {
+        "id": 21,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 20,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 26,
+        "file_name": "documentos_RRHH_04_Guia_Desempeno.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 25,
+        "file_name": "documentos_RRHH_04_Guia_Desempeno.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 23,
+        "file_name": "documentos_RRHH_03_Protocolo_Teletrabajo.pdf",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "RRHH",
+    "elapsed_seconds": 79.6,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-11",
+    "bloque": "C-RRHH-std",
+    "question": "¿Con qué frecuencia deben entregarse los partes de confirmación durante una baja?",
+    "expected": "Cada 7 días",
+    "response": "Según el documento documentos_RRHH_01_Manual_Bienvenida.docx, trata sobre bienvenida e inducción de personal. Sin embargo, no se proporciona información específica sobre la entrega de partes de confirmación durante una baja en los documentos analizados.",
+    "metadata": [
+      {
+        "id": 20,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 26,
+        "file_name": "documentos_RRHH_04_Guia_Desempeno.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 21,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 22,
+        "file_name": "documentos_RRHH_02_Politica_Horarios.txt",
+        "security": "Público"
+      },
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "RRHH",
+    "elapsed_seconds": 86.9,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-12",
+    "bloque": "C-RRHH-std",
+    "question": "¿En qué plazo debe notificarse una baja laboral?",
+    "expected": "Máximo 24 horas desde la emisión del parte médico",
+    "response": "Según el archivo manual de bienvenida e inducción de personal, no hay información específica sobre el plazo para notificar una baja laboral.",
+    "metadata": [
+      {
+        "id": 22,
+        "file_name": "documentos_RRHH_02_Politica_Horarios.txt",
+        "security": "Público"
+      },
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 20,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 23,
+        "file_name": "documentos_RRHH_03_Protocolo_Teletrabajo.pdf",
+        "security": "Público"
+      },
+      {
+        "id": 28,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "RRHH",
+    "elapsed_seconds": 94.5,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-13",
+    "bloque": "D-RRHH-high",
+    "question": "¿Cuál es la banda salarial de un Investigador Principal?",
+    "expected": "55.000 EUR - 75.000 EUR",
+    "response": "Según el documento documentos_RRHH_05_Estructura_Salarial.pdf, la banda salarial para un Investigador Principal / Doctor en Informática es de 55.000 EUR - 75.000 EUR.",
+    "metadata": [
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 274,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 33,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 252,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 285,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 22,
+        "file_name": "documentos_RRHH_02_Politica_Horarios.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "RRHH",
+    "elapsed_seconds": 101.1,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-14",
+    "bloque": "D-RRHH-high",
+    "question": "¿Cuál es la banda salarial de un Ingeniero de Software Senior?",
+    "expected": "42.000 EUR - 54.000 EUR",
+    "response": "Según el documento documentos_RRHH_05_Estructura_Salarial.pdf, la banda salarial para un Ingeniero de Software Senior / Especialista RAG es de 42.000 EUR - 54.000 EUR.",
+    "metadata": [
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 274,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 285,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 252,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 33,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 28,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "RRHH",
+    "elapsed_seconds": 61.0,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-15",
+    "bloque": "D-RRHH-high",
+    "question": "¿Cuándo se realizan las revisiones salariales?",
+    "expected": "Cada mes de diciembre",
+    "response": "Según el archivo documentos_RRHH_05_Estructura_Salarial.pdf, se realizarán las revisiones salariales de manera asíncrona cada mes de diciembre considerando las métricas de rendimiento extraídas del sistema analítico local.",
+    "metadata": [
+      {
+        "id": 28,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 274,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 26,
+        "file_name": "documentos_RRHH_04_Guia_Desempeno.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 326,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 361,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "RRHH",
+    "elapsed_seconds": 115.0,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-16",
+    "bloque": "D-RRHH-high",
+    "question": "¿A partir de qué día asume la Seguridad Social el pago directo en una baja?",
+    "expected": "A partir del día 21",
+    "response": "Según el documento documentos_RRHH_08_Protocolo_Bajas.txt, a partir del día 21, la Seguridad Social asume el pago directo.",
+    "metadata": [
+      {
+        "id": 34,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 33,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 285,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 320,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 263,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "RRHH",
+    "elapsed_seconds": 82.5,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-17",
+    "bloque": "E-admin",
+    "question": "¿Cuál es la dieta máxima diaria nacional para viajes?",
+    "expected": "45 EUR",
+    "response": "Según el documento documentos_ADM_02_Guia_Dietas.docx, trata sobre la guía de procedimientos para la solicitud de dietas y viajes. No se especifica una dieta máxima diaria nacional en este documento.",
+    "metadata": [
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 229,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 22,
+        "file_name": "documentos_RRHH_02_Politica_Horarios.txt",
+        "security": "Público"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "admin",
+    "dept": "Administración",
+    "elapsed_seconds": 92.6,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-18",
+    "bloque": "E-admin",
+    "question": "¿Cuál es la banda salarial de un Ingeniero de Datos Junior?",
+    "expected": "28.000 EUR - 38.000 EUR",
+    "response": "Según el documento documentos_RRHH_05_Estructura_Salarial.pdf, no se especifica directamente la banda salarial para un Ingeniero de Datos Junior. El rango salarial proporcionado abarca roles como Investigador Principal / Doctor en Informática y Ingeniero de Software Senior / Especialista RAG, pero no incluye el nivel de un Ingeniero de Datos Junior.",
+    "metadata": [
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 274,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 285,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 105,
+        "file_name": "documentos_extensos_ADM_10_Pliego_Prescripciones_Tecnicas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 252,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 33,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "admin",
+    "dept": "RRHH (cross-dpto)",
+    "elapsed_seconds": 99.9,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-19",
+    "bloque": "E-admin",
+    "question": "¿Qué parámetros HNSW se usan en el índice vectorial según el plan estratégico?",
+    "expected": "m=16 y ef_construction=64",
+    "response": "Según el archivo documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf, se usan los parámetros HNSW m=16 y ef_construction=64 en el índice vectorial.",
+    "metadata": [
+      {
+        "id": 321,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 333,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 339,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 356,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 367,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 373,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "admin",
+    "dept": "Administración",
+    "elapsed_seconds": 126.1,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-20",
+    "bloque": "E-admin",
+    "question": "¿Qué porcentaje de la base reguladora abona la empresa entre el día 4 y 20 de una baja?",
+    "expected": "60% de la base reguladora",
+    "response": "Según el documento documentos_RRHH_08_Protocolo_Bajas.txt, durante los días 4 al 20 de una baja, la empresa abona el 60% de la base reguladora.",
+    "metadata": [
+      {
+        "id": 34,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 33,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 13,
+        "file_name": "documentos_ADM_04_Protocolo_Reuniones.txt",
+        "security": "Público"
+      },
+      {
+        "id": 58,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 70,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 190,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "admin",
+    "dept": "RRHH (cross-dpto)",
+    "elapsed_seconds": 107.8,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-21",
+    "bloque": "F-cross-dpto",
+    "question": "¿Cuál es la banda salarial de un Investigador Principal?",
+    "expected": "RLS DENEGADO",
+    "response": "Según el archivo documentos_ADM_02_Guia_Dietas.docx, trata sobre procedimientos para la solicitud de dietas y viajes. No se menciona información específica sobre la banda salarial de un Investigador Principal.",
+    "metadata": [
+      {
+        "id": 17,
+        "file_name": "documentos_ADM_07_Contrato_Infraestructura.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 10,
+        "file_name": "documentos_ADM_04_Acta_Presupuestos.docx",
+        "security": "Público"
+      },
+      {
+        "id": 3,
+        "file_name": "documentos_ADM_02_Guia_Dietas.docx",
+        "security": "Público"
+      },
+      {
+        "id": 18,
+        "file_name": "documentos_ADM_08_Auditoria_Riesgos.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "ADM→RRHH",
+    "elapsed_seconds": 89.0,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-22",
+    "bloque": "F-cross-dpto",
+    "question": "¿Cuál es el fondo de reserva para contingencias de ciberseguridad?",
+    "expected": "RLS DENEGADO",
+    "response": "Según el archivo documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx, trata sobre calibración del índice HNSW y procesamiento vectorial en pgvector.",
+    "metadata": [
+      {
+        "id": 298,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 23,
+        "file_name": "documentos_RRHH_03_Protocolo_Teletrabajo.pdf",
+        "security": "Público"
+      },
+      {
+        "id": 20,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 279,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 257,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 268,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "RRHH→ADM",
+    "elapsed_seconds": 120.0,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-23",
+    "bloque": "G-expirado",
+    "question": "¿Cuáles son las fechas del calendario fiscal?",
+    "expected": "SIN RESULTADO: doc expirado 2026-01-01",
+    "response": "Según el archivo documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt, no se mencionan específicamente las fechas del calendario fiscal. Sin embargo, se indica que las solicitudes para los meses de julio y agosto deben presentarse antes del 30 de abril de cada año.",
+    "metadata": [
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 12,
+        "file_name": "documentos_ADM_04_Protocolo_Reuniones.txt",
+        "security": "Público"
+      },
+      {
+        "id": 82,
+        "file_name": "documentos_extensos_ADM_09_Plan_Estrategico_Financiero.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 6,
+        "file_name": "documentos_ADM_03_Control_Gastos.pdf",
+        "security": "Público"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "admin",
+    "dept": "Administración",
+    "elapsed_seconds": 100.5,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-24",
+    "bloque": "G-vigente",
+    "question": "¿Cuál es el protocolo de vacaciones vigente?",
+    "expected": "Respuesta válida (doc vigente hasta 2026-12-31)",
+    "response": "Según el documento documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt, el protocolo de vacaciones vigente incluye los siguientes puntos:\n\n- Las solicitudes de vacaciones deben presentarse con un mínimo de 15 días de antelación a través del sistema corporativo de RRHH.\n- El periodo ordinario de vacaciones es de 22 días laborables anuales según el convenio colectivo vigente.\n- Los meses de julio y agosto se consideran periodos preferentes. Las solicitudes para estos meses deben presentarse antes del 30 de abril de cada año.\n- En caso de coincidencia entre empleados del mismo departamento, se aplicará criterio de antigüedad para la asignación de turnos.\n- Si durante el periodo de vacaciones el empleado causa baja médica debidamente acreditada, los días de baja no se computarán como vacaciones y podrán disfrutarse en fecha posterior acordada con el responsable.\n- El empleado podrá fraccionar sus vacaciones en un máximo de 3 periodos, siendo el periodo mínimo de 5 días laborables consecutivos. Los días restantes podrán disfrutarse de forma individual previa autorización del responsable de departamento.\n- No se permite la compensación económica de los días de vacaciones no disfrutados, salvo en caso de extinción del contrato laboral, donde se abonarán los días proporcionales pendientes de disfrute.",
+    "metadata": [
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 9,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 8,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      },
+      {
+        "id": 174,
+        "file_name": "documentos_extensos_ADM_10_Pliego_Prescripciones_Tecnicas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 105,
+        "file_name": "documentos_extensos_ADM_10_Pliego_Prescripciones_Tecnicas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 263,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "admin",
+    "dept": "Administración",
+    "elapsed_seconds": 126.4,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-25",
+    "bloque": "H-sin-respuesta",
+    "question": "¿Cuál es la política de stock options de la empresa?",
+    "expected": "No debe alucinar",
+    "response": "Según el archivo documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx, trata sobre políticas relacionadas con el régimen de teletrabajo y conservación del perímetro de seguridad. No se menciona ninguna política sobre stock options en los documentos proporcionados.",
+    "metadata": [
+      {
+        "id": 285,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 227,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 10,
+        "file_name": "documentos_ADM_04_Acta_Presupuestos.docx",
+        "security": "Público"
+      },
+      {
+        "id": 190,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 201,
+        "file_name": "documentos_extensos_ADM_11_Manual_Auditoria_Algoritmica.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 297,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "admin",
+    "dept": "N/A",
+    "elapsed_seconds": 56.8,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-26",
+    "bloque": "H-sin-respuesta",
+    "question": "¿Qué herramientas de IA usa el departamento de marketing?",
+    "expected": "No debe inventar departamentos",
+    "response": "Según el archivo documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx, trata sobre procesamiento vectorial y el uso de pgvector con operaciones de distancia coseno. No se mencionan herramientas de IA específicas para el departamento de marketing.",
+    "metadata": [
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 34,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 33,
+        "file_name": "documentos_RRHH_08_Protocolo_Bajas.txt",
+        "security": "Confidencial"
+      },
+      {
+        "id": 309,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      },
+      {
+        "id": 332,
+        "file_name": "documentos_extensos_RRHH_09_Protocolo_Seguridad_RGPD.pdf",
+        "security": "Confidencial"
+      },
+      {
+        "id": 253,
+        "file_name": "documentos_extensos_RRHH_08_Manual_Políticas_Empleo.docx",
+        "security": "Confidencial"
+      }
+    ],
+    "role": "dept_high",
+    "dept": "N/A",
+    "elapsed_seconds": 99.8,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-27",
+    "bloque": "I-confidencial",
+    "question": "¿Cuál es el valor de los activos corrientes en el cierre Q1 2026?",
+    "expected": "SIN RESULTADO: no ve Confidencial",
+    "response": "Según el documento documentos_ADM_06_Balance_Contable.pdf, los activos corrientes en el cierre Q1 2026 son de 450.000 EUR.",
+    "metadata": [
+      {
+        "id": 15,
+        "file_name": "documentos_ADM_06_Balance_Contable.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 17,
+        "file_name": "documentos_ADM_07_Contrato_Infraestructura.docx",
+        "security": "Interno"
+      },
+      {
+        "id": 18,
+        "file_name": "documentos_ADM_08_Auditoria_Riesgos.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 6,
+        "file_name": "documentos_ADM_03_Control_Gastos.pdf",
+        "security": "Público"
+      },
+      {
+        "id": 12,
+        "file_name": "documentos_ADM_04_Protocolo_Reuniones.txt",
+        "security": "Público"
+      },
+      {
+        "id": 7,
+        "file_name": "documentos_ADM_03_Protocolo_Vacaciones__EXP20261231.txt",
+        "security": "Público"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "Administración",
+    "elapsed_seconds": 105.1,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  },
+  {
+    "id": "GS-28",
+    "bloque": "I-confidencial",
+    "question": "¿Cuál es la banda salarial de un Investigador Principal?",
+    "expected": "SIN RESULTADO: no ve Confidencial",
+    "response": "Según el documento documentos_RRHH_05_Estructura_Salarial.pdf, la banda salarial para un Investigador Principal / Doctor en Informática es de 55.000 EUR - 75.000 EUR.",
+    "metadata": [
+      {
+        "id": 27,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 22,
+        "file_name": "documentos_RRHH_02_Politica_Horarios.txt",
+        "security": "Público"
+      },
+      {
+        "id": 30,
+        "file_name": "documentos_RRHH_06_Fichas_Contratacion.txt",
+        "security": "Interno"
+      },
+      {
+        "id": 28,
+        "file_name": "documentos_RRHH_05_Estructura_Salarial.pdf",
+        "security": "Interno"
+      },
+      {
+        "id": 20,
+        "file_name": "documentos_RRHH_01_Manual_Bienvenida.docx",
+        "security": "Público"
+      },
+      {
+        "id": 25,
+        "file_name": "documentos_RRHH_04_Guia_Desempeno.docx",
+        "security": "Interno"
+      }
+    ],
+    "role": "dept_standard",
+    "dept": "RRHH",
+    "elapsed_seconds": 93.1,
+    "status": "ok",
+    "model": "qwen2.5:7b",
+    "ronda": "R3-qwen25-7b"
+  }
+]

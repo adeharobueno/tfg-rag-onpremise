@@ -1,57 +1,199 @@
+"""
+Tests de aislamiento RLS en PostgreSQL.
+Verifica que las políticas RLS filtran correctamente por departamento,
+nivel de confidencialidad y expiración documental.
+Usa queries SQL directas con GUC para activar RLS, evitando dependencia
+del ranking vectorial que compite con el corpus real.
+RNF-S01, RNF-S06, RNF-S05.
+"""
 import pytest
-import jwt
-from httpx import AsyncClient
-from app.main import app, JWT_SECRET
-from app.database import get_db_connection
+import json
+import numpy as np
+from datetime import datetime, timezone
+from app.database import get_db_connection, get_db_connection_admin
+import requests
 
-def generate_mock_jwt(dept: str, role: str):
-    return jwt.encode({"department": dept, "role": role}, JWT_SECRET, algorithm="HS256")
 
-@pytest.mark.asyncio
-async def test_rls_blocks_unauthorized_vectors():
-    test_query = "Protocolos de despido y salarios directivos"
-    
-    # FASE 1: Obtener un vector real de Ollama para garantizar la máxima puntuación
-    async with AsyncClient() as ac:
-        ollama_res = await ac.post("http://ollama_engine:11434/api/embeddings", 
-                                   json={"model": "nomic-embed-text", "prompt": test_query})
-        real_embedding = ollama_res.json()["embedding"]
+# ── HELPERS ────────────────────────────────────────────
 
-    # FASE 2: Inyección de semilla controlada (Setup)
-    conn = await get_db_connection()
-    await conn.execute("DELETE FROM document_sections WHERE department IN ('TEST_RRHH', 'TEST_IT')")
-    
-    await conn.execute("""
-        INSERT INTO document_sections (text, metadata, embedding, department, confidentiality_level)
-        VALUES 
-        ($1, '{"file_name": "secreto.pdf"}', $2::vector, 'TEST_RRHH', 'Confidencial'),
-        ($3, '{"file_name": "impresora.pdf"}', $4::vector, 'TEST_IT', 'Público')
-    """, 
-    "Documento altamente confidencial sobre los protocolos de despido", real_embedding, 
-    "Manual técnico básico para reparar la impresora", real_embedding)
+async def get_test_embedding():
+    """Obtiene un embedding real de Ollama para los datos de prueba."""
+    res = requests.post(
+        "http://ollama_engine:11434/api/embeddings",
+        json={"model": "nomic-embed-text", "prompt": "documento de prueba para tests RLS"}
+    )
+    return res.json()["embedding"]
+
+
+async def setup_test_data(embedding):
+    """Inserta datos de prueba con departamentos y niveles de test."""
+    conn = await get_db_connection_admin()
+    await conn.execute(
+        "DELETE FROM document_sections WHERE department IN ('TEST_RRHH', 'TEST_ADM')"
+    )
+    emb_np = np.array(embedding, dtype=np.float32)
+    expired_dt = datetime(2020, 1, 1, tzinfo=timezone.utc)
+
+    test_docs = [
+        ("Protocolo confidencial de despidos TEST", "TEST_RRHH", "Confidencial", None),
+        ("Manual público de bienvenida TEST", "TEST_RRHH", "Público", None),
+        ("Documento interno RRHH TEST", "TEST_RRHH", "Interno", None),
+        ("Presupuesto interno TEST administración", "TEST_ADM", "Interno", None),
+        ("Guía pública TEST administración", "TEST_ADM", "Público", None),
+        ("Documento expirado TEST", "TEST_ADM", "Público", expired_dt),
+    ]
+    for text, dept, level, exp in test_docs:
+        meta = json.dumps({
+            "file_name": f"test_{dept}_{level}.txt",
+            "department": dept,
+            "confidentiality_level": level,
+            "valid_until": exp.isoformat() if exp else None,
+            "document_hash": "test_" + dept + "_" + level
+        })
+        await conn.execute("""
+            INSERT INTO document_sections (text, metadata, embedding, department,
+                confidentiality_level, valid_until, document_hash)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
+        """, text, meta, emb_np, dept, level,
+            exp if exp else None, "test_" + dept + "_" + level)
     await conn.close()
 
-    # FASE 3: Ejecución de las peticiones HTTP
-    payload = {"question": test_query}
-    headers_rrhh = {"Authorization": f"Bearer {generate_mock_jwt('TEST_RRHH', 'manager')}"}
-    headers_it = {"Authorization": f"Bearer {generate_mock_jwt('TEST_IT', 'employee')}"}
-    headers_admin = {"Authorization": f"Bearer {generate_mock_jwt('CUALQUIERA', 'admin')}"}
 
-    async with AsyncClient(app=app, base_url="http://test") as ac:
-        res_rrhh = await ac.post("/api/v1/retrieve", json=payload, headers=headers_rrhh)
-        res_it = await ac.post("/api/v1/retrieve", json=payload, headers=headers_it)
-        res_admin = await ac.post("/api/v1/retrieve", json=payload, headers=headers_admin)
+async def cleanup_test_data():
+    """Elimina datos de prueba."""
+    conn = await get_db_connection_admin()
+    await conn.execute(
+        "DELETE FROM document_sections WHERE department IN ('TEST_RRHH', 'TEST_ADM')"
+    )
+    await conn.close()
 
-    # Transformamos las respuestas en cadenas de texto plano para evaluar el contenido real
-    textos_rrhh = str([c.get("text") for c in res_rrhh.json().get("chunks", [])])
-    textos_it = str([c.get("text") for c in res_it.json().get("chunks", [])])
-    textos_admin = str([c.get("text") for c in res_admin.json().get("chunks", [])])
 
-    print(f"\n--- DEPURACIÓN DE CONTEXTO ---")
-    print(f"RRHH recuperó: {textos_rrhh}")
-    print(f"IT recuperó: {textos_it}")
+async def query_rls_as_role(dept, role):
+    """
+    Ejecuta una query SELECT directa sobre document_sections con RLS activado,
+    filtrando solo los datos de test. Evita la búsqueda vectorial para no competir
+    con el corpus real en el ranking de distancia.
+    """
+    conn = await get_db_connection()
+    try:
+        async with conn.transaction():
+            await conn.execute("SELECT set_config('app.current_user_dept', $1, true);", dept)
+            await conn.execute("SELECT set_config('app.current_user_role', $1, true);", role)
+            rows = await conn.fetch("""
+                SELECT text, department, confidentiality_level, valid_until
+                FROM document_sections
+                WHERE department IN ('TEST_RRHH', 'TEST_ADM')
+                ORDER BY department, confidentiality_level
+            """)
+        return [dict(r) for r in rows]
+    finally:
+        await conn.close()
 
-    # FASE 4: Validaciones de Lógica de Negocio y RLS
-    assert "despido" in textos_rrhh, "Fallo: RRHH no puede ver su propio documento"
-    assert "despido" not in textos_it, "Fuga Crítica: IT está viendo el documento confidencial de RRHH"
-    assert "despido" in textos_admin and "impresora" in textos_admin, "Fallo: Admin no ve todos los datos"
+
+# ── TESTS ──────────────────────────────────────────────
+
+@pytest.mark.asyncio
+async def test_rls_dept_isolation():
+    """RNF-S01: Un usuario de TEST_RRHH no ve documentos de TEST_ADM y viceversa."""
+    embedding = await get_test_embedding()
+    await setup_test_data(embedding)
+    try:
+        rows_rrhh = await query_rls_as_role("TEST_RRHH", "dept_high")
+        rows_adm = await query_rls_as_role("TEST_ADM", "dept_standard")
+
+        # RRHH dept_high ve documentos de su departamento
+        depts_rrhh = set(r["department"] for r in rows_rrhh)
+        assert "TEST_RRHH" in depts_rrhh, \
+            f"dept_high de TEST_RRHH no ve sus documentos: {rows_rrhh}"
+        assert "TEST_ADM" not in depts_rrhh, \
+            f"FUGA: dept_high de TEST_RRHH ve documentos de TEST_ADM: {rows_rrhh}"
+
+        # ADM dept_standard ve documentos de su departamento
+        depts_adm = set(r["department"] for r in rows_adm)
+        assert "TEST_ADM" in depts_adm, \
+            f"dept_standard de TEST_ADM no ve sus documentos: {rows_adm}"
+        assert "TEST_RRHH" not in depts_adm, \
+            f"FUGA: dept_standard de TEST_ADM ve documentos de TEST_RRHH: {rows_adm}"
+    finally:
+        await cleanup_test_data()
+
+
+@pytest.mark.asyncio
+async def test_rls_confidentiality_levels():
+    """RNF-S01: dept_standard no ve documentos Confidenciales de su propio departamento."""
+    embedding = await get_test_embedding()
+    await setup_test_data(embedding)
+    try:
+        rows_std = await query_rls_as_role("TEST_RRHH", "dept_standard")
+        rows_high = await query_rls_as_role("TEST_RRHH", "dept_high")
+
+        levels_std = set(r["confidentiality_level"] for r in rows_std)
+        levels_high = set(r["confidentiality_level"] for r in rows_high)
+
+        # dept_standard ve Público e Interno, NO Confidencial
+        assert "Público" in levels_std, \
+            f"dept_standard no ve Público: {levels_std}"
+        assert "Interno" in levels_std, \
+            f"dept_standard no ve Interno: {levels_std}"
+        assert "Confidencial" not in levels_std, \
+            f"FUGA: dept_standard ve Confidencial: {rows_std}"
+
+        # dept_high ve Público, Interno Y Confidencial
+        assert "Confidencial" in levels_high, \
+            f"dept_high no ve Confidencial: {levels_high}"
+        assert "Público" in levels_high, \
+            f"dept_high no ve Público: {levels_high}"
+    finally:
+        await cleanup_test_data()
+
+
+@pytest.mark.asyncio
+async def test_rls_expired_documents_blocked():
+    """RNF-S06: Documentos expirados bloqueados para TODOS los roles, incluido admin."""
+    embedding = await get_test_embedding()
+    await setup_test_data(embedding)
+    try:
+        rows_admin = await query_rls_as_role("TEST_ADM", "admin")
+        rows_std = await query_rls_as_role("TEST_ADM", "dept_standard")
+
+        # Ningún rol ve el documento expirado
+        texts_admin = [r["text"] for r in rows_admin]
+        texts_std = [r["text"] for r in rows_std]
+
+        assert not any("expirado" in t.lower() for t in texts_admin), \
+            f"FUGA CRÍTICA: Admin ve documento expirado: {texts_admin}"
+        assert not any("expirado" in t.lower() for t in texts_std), \
+            f"FUGA: dept_standard ve documento expirado: {texts_std}"
+
+        # Pero admin sí ve los documentos vigentes de TEST_ADM
+        assert len(rows_admin) > 0, \
+            f"Admin no ve ningún documento vigente de TEST_ADM"
+    finally:
+        await cleanup_test_data()
+
+
+@pytest.mark.asyncio
+async def test_rls_admin_sees_all_departments():
+    """RNF-S01: Admin ve documentos vigentes de todos los departamentos."""
+    embedding = await get_test_embedding()
+    await setup_test_data(embedding)
+    try:
+        rows_admin = await query_rls_as_role("CUALQUIERA", "admin")
+
+        depts = set(r["department"] for r in rows_admin)
+        assert "TEST_RRHH" in depts, \
+            f"Admin no ve TEST_RRHH: {depts}"
+        assert "TEST_ADM" in depts, \
+            f"Admin no ve TEST_ADM: {depts}"
+
+        # Admin ve todos los niveles vigentes
+        levels = set(r["confidentiality_level"] for r in rows_admin)
+        assert "Público" in levels and "Interno" in levels and "Confidencial" in levels, \
+            f"Admin no ve todos los niveles: {levels}"
+
+        # Pero NO ve el expirado
+        texts = [r["text"] for r in rows_admin]
+        assert not any("expirado" in t.lower() for t in texts), \
+            f"FUGA: Admin ve documento expirado: {texts}"
+    finally:
+        await cleanup_test_data()

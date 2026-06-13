@@ -18,12 +18,17 @@ GRANT USAGE ON SCHEMA public TO api_gateway;
 -- Otorgar permisos estrictos de manipulación de datos (DML) al rol de la API
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE users TO api_gateway;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE document_sections TO api_gateway;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE audit_logs TO api_gateway;
+GRANT SELECT, INSERT, UPDATE ON TABLE audit_logs TO api_gateway;  -- Sin DELETE: inmutabilidad de trazas (RNF-N02)
+GRANT SELECT, UPDATE ON TABLE rag_config TO api_gateway;
+GRANT SELECT, INSERT ON TABLE trulens_evaluations TO api_gateway;
+GRANT SELECT, INSERT ON TABLE rbac_denials TO api_gateway;  -- RF-D05: log de denegaciones RBAC
 
 -- Permitir el uso de secuencias autoincrementales
 GRANT USAGE, SELECT ON SEQUENCE users_user_id_seq TO api_gateway;
 GRANT USAGE, SELECT ON SEQUENCE document_sections_section_id_seq TO api_gateway;
 GRANT USAGE, SELECT ON SEQUENCE audit_logs_log_id_seq TO api_gateway;
+GRANT USAGE, SELECT ON SEQUENCE trulens_evaluations_eval_id_seq TO api_gateway;
+GRANT USAGE, SELECT ON SEQUENCE rbac_denials_denial_id_seq TO api_gateway;
 
 -- =============================================================================
 -- 2. TRIGGER: Sincroniza metadatos JSONB a columnas relacionales

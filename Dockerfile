@@ -1,4 +1,4 @@
-FROM docker.n8n.io/n8nio/n8n:latest
+FROM docker.n8n.io/n8nio/n8n:2.21.4
 USER root
 RUN set -e; \
     BASE=/usr/local/lib/node_modules/n8n/node_modules; \

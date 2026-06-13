@@ -2,7 +2,7 @@ import asyncpg
 import os
 from pgvector.asyncpg import register_vector
 
-DB_DSN = os.getenv("DATABASE_URL", "postgresql://api_gateway:App_Pass_Gateway_Secure_2026%3F@postgres_db:5432/tfg_rag_db")
+DB_DSN = os.getenv("DATABASE_URL")
 
 async def get_db_connection():
     conn = await asyncpg.connect(DB_DSN)
@@ -30,10 +30,7 @@ async def search_vectors_with_rls(conn, embedding: list[float], dept: str, role:
                 limit = 6
         return await conn.fetch(query, embedding, limit)
 
-DB_DSN_ADMIN = os.getenv(
-    "DATABASE_URL_ADMIN",
-    "postgresql://postgres:Sub_Secret_Pass_Admin_2026!@postgres_db:5432/tfg_rag_db"
-)
+DB_DSN_ADMIN = os.getenv("DATABASE_URL_ADMIN")
 
 async def get_db_connection_admin():
     conn = await asyncpg.connect(DB_DSN_ADMIN)

@@ -1,14 +1,43 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Depends, HTTPException, Header, BackgroundTasks, Request
 from fastapi.responses import StreamingResponse
-from app.database import get_db_connection, get_db_connection_admin, search_vectors_with_rls
+from app.database import (
+    init_pools, close_pools, get_pool, get_pool_admin,
+    search_vectors_with_rls, get_cached_config, invalidate_config_cache
+)
 from pydantic import BaseModel
-import requests, jwt, json
+import httpx
+import jwt, json
 from datetime import datetime, timedelta, timezone
-
-app = FastAPI(title="TFG RAG Secure API Gateway", version="1.0.0")
 import os as _os
+import base64 as _b64
+
+# ── HTTP Client for Ollama (shared, non-blocking) ────────────
+_http_client: httpx.AsyncClient = None
+
+
+@asynccontextmanager
+async def lifespan(app):
+    """Manage startup/shutdown: connection pools + async HTTP client."""
+    global _http_client
+    await init_pools()
+    _http_client = httpx.AsyncClient(
+        timeout=httpx.Timeout(connect=10.0, read=300.0, write=10.0, pool=10.0)
+    )
+    yield
+    await _http_client.aclose()
+    await close_pools()
+
+
+app = FastAPI(
+    title="TFG RAG Secure API Gateway",
+    version="1.0.0",
+    lifespan=lifespan
+)
+
 JWT_SECRET = _os.getenv("JWT_SECRET")
 JWT_EXPIRATION_MINUTES = 60
+
 
 # ─── RF-D05: LOG DE DENEGACIONES RBAC ─────────────────
 async def log_rbac_denial(username: str, department: str, role: str,
@@ -16,23 +45,25 @@ async def log_rbac_denial(username: str, department: str, role: str,
                           ip: str = None):
     """Registra una denegación de acceso en rbac_denials (RF-D05)."""
     try:
-        conn = await get_db_connection()
-        await conn.execute(
-            """INSERT INTO rbac_denials
-               (username, department, user_role, endpoint, denial_reason, detail, ip_address)
-               VALUES ($1, $2, $3, $4, $5, $6, $7)""",
-            username, department, role, endpoint, reason, detail, ip
-        )
-        await conn.close()
+        async with get_pool().acquire() as conn:
+            await conn.execute(
+                """INSERT INTO rbac_denials
+                   (username, department, user_role, endpoint, denial_reason, detail, ip_address)
+                   VALUES ($1, $2, $3, $4, $5, $6, $7)""",
+                username, department, role, endpoint, reason, detail, ip
+            )
     except Exception as e:
         print(f"[RF-D05] Error registrando denegación RBAC: {e}")
+
 
 class QueryRequest(BaseModel):
     question: str
 
+
 class AuthRequest(BaseModel):
     username: str
     password: str
+
 
 def verify_jwt_token(authorization: str = Header(...)):
     try:
@@ -44,10 +75,11 @@ def verify_jwt_token(authorization: str = Header(...)):
     except Exception:
         raise HTTPException(status_code=401, detail="Token corporativo inválido")
 
+
 # Middleware para capturar denegaciones 401/403 y registrarlas en rbac_denials
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request as StarletteRequest
-import base64 as _b64
+
 
 class RBACDenialMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: StarletteRequest, call_next):
@@ -78,7 +110,9 @@ class RBACDenialMiddleware(BaseHTTPMiddleware):
             )
         return response
 
+
 app.add_middleware(RBACDenialMiddleware)
+
 
 @app.post("/auth/token")
 async def login(credentials: AuthRequest):
@@ -87,8 +121,7 @@ async def login(credentials: AuthRequest):
     y devuelve un JWT firmado con claims sub, department, role y exp.
     Cumple RF-C01 y RF-C02 del Capítulo 4.
     """
-    conn = await get_db_connection_admin()
-    try:
+    async with get_pool_admin().acquire() as conn:
         row = await conn.fetchrow(
             """
             SELECT user_id, username, department, user_role
@@ -98,8 +131,6 @@ async def login(credentials: AuthRequest):
             """,
             credentials.username, credentials.password
         )
-    finally:
-        await conn.close()
 
     if not row:
         # RF-D05: Registrar intento de login fallido
@@ -131,6 +162,7 @@ async def login(credentials: AuthRequest):
         }
     }
 
+
 SYSTEM_PROMPT = """Eres un microservicio interno de extracción de datos. Tu única tarea es extraer el tema utilizando ESTRICTAMENTE este formato: 'Según el archivo [fuente], trata sobre [tema].' No emitas advertencias, disclaimers ni texto conversacional."""
 
 FEW_SHOT_USER = """<contexto>
@@ -142,31 +174,21 @@ Pregunta: ¿Sobre qué temas trata el documento recuperado?"""
 
 FEW_SHOT_ASSISTANT = "Según el archivo recortes_q3.pdf, trata sobre recortes salariales y despidos masivos."
 
-async def _get_active_model(conn) -> str:
-    try:
-        conn_cfg = await get_db_connection_admin()
-        row = await conn_cfg.fetchrow("SELECT value FROM rag_config WHERE key='model'")
-        await conn_cfg.close()
-        return row["value"] if row else "llama3.1:8b"
-    except Exception:
-        return "llama3.1:8b"
 
 @app.post("/api/v1/chat/stream")
 async def rag_chat_stream(request: QueryRequest, background_tasks: BackgroundTasks, token_data: dict = Depends(verify_jwt_token)):
-    # 1. Vectorización
+    # 1. Vectorización (ASYNC — no bloquea el event loop)
     ollama_embed_url = "http://ollama_engine:11434/api/embeddings"
-    res_embed = requests.post(ollama_embed_url, json={"model": "nomic-embed-text", "prompt": request.question})
+    res_embed = await _http_client.post(
+        ollama_embed_url,
+        json={"model": "nomic-embed-text", "prompt": request.question}
+    )
     query_embedding = res_embed.json()["embedding"]
-    
-    # 2. Recuperación Segura (RLS)
+
+    # 2. Recuperación Segura (RLS) — usa pool interno
     dept = token_data.get("department", "UNKNOWN")
     role = token_data.get("role", "UNKNOWN")
-    
-    conn = await get_db_connection()
-    try:
-        results = await search_vectors_with_rls(conn, query_embedding, dept, role)
-    finally: 
-        await conn.close()
+    results = await search_vectors_with_rls(query_embedding, dept, role)
 
     if not results:
         # RF-D05: Registrar denegación silenciosa por RLS
@@ -180,8 +202,8 @@ async def rag_chat_stream(request: QueryRequest, background_tasks: BackgroundTas
         )
         return {"error": "Operación denegada"}
 
-    # 2b. Obtener modelo activo
-    _active_model_name = await _get_active_model(None)
+    # 2b. Obtener modelo activo (CACHED — sin conexión extra)
+    _active_model_name = await get_cached_config("model", "llama3.1:8b")
 
     # 3. Metadatos de Trazabilidad
     sources = [
@@ -194,21 +216,12 @@ async def rag_chat_stream(request: QueryRequest, background_tasks: BackgroundTas
     chunks_id = [r['section_id'] for r in results]
     context_text = "\n".join([f'<documento fuente="{sources[i]["file_name"]}" seguridad="{sources[i]["security"]}">\n{r["text"]}\n</documento>' for i, r in enumerate(results)])
 
-    # Si no hay chunks relevantes (umbral similitud o RLS filtró todo), respuesta inmediata
-    if not results:
-        async def empty_generator():
-            msg = "No dispongo de información relevante en el repositorio corporativo para responder a esta consulta con el nivel de acceso actual."
-            yield f"event: metadata\ndata: {json.dumps([])}\n\n"
-            yield f"data: {json.dumps({'token': msg})}\n\n"
-            yield "data: {}\n\n"
-        return StreamingResponse(empty_generator(), media_type="text/event-stream")
-
     full_response_accumulator = [""]
 
-    # 4. Generador SSE
-    def event_generator():
+    # 4. Generador SSE (ASYNC — no bloquea el event loop)
+    async def event_generator():
         yield f"event: metadata\ndata: {json.dumps(sources)}\n\n"
-        
+
         ollama_chat_url = "http://ollama_engine:11434/api/chat"
         chat_payload = {
             "model": _active_model_name,
@@ -221,31 +234,30 @@ async def rag_chat_stream(request: QueryRequest, background_tasks: BackgroundTas
             "stream": True,
             "options": {"temperature": 0.0, "top_p": 0.1, "num_ctx": 4096, "num_predict": 512}
         }
-        
-        with requests.post(ollama_chat_url, json=chat_payload, stream=True) as response:
-            for line in response.iter_lines():
+
+        async with _http_client.stream("POST", ollama_chat_url, json=chat_payload) as response:
+            async for line in response.aiter_lines():
                 if line:
                     chunk = json.loads(line)
                     if "message" in chunk and "content" in chunk["message"]:
                         token = chunk["message"]["content"]
                         full_response_accumulator[0] += token
                         yield f"event: message\ndata: {json.dumps({'token': token})}\n\n"
-        
+
         yield "event: done\ndata: {}\n\n"
 
-    # 5. Audit Trail en Background
+    # 5. Audit Trail en Background (usa pool)
     async def save_log_task():
         try:
-            write_conn = await get_db_connection()
-            insert_query = """
-                INSERT INTO audit_logs (user_department, user_role, question, response, context_used, chunks_id, model_used)
-                VALUES ($1, $2, $3, $4, $5, $6, $7);
-            """
-            await write_conn.execute(
-                insert_query, 
-                dept, role, request.question, full_response_accumulator[0], context_text, chunks_id, _active_model_name
-            )
-            await write_conn.close()
+            async with get_pool().acquire() as conn:
+                insert_query = """
+                    INSERT INTO audit_logs (user_department, user_role, question, response, context_used, chunks_id, model_used)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7);
+                """
+                await conn.execute(
+                    insert_query,
+                    dept, role, request.question, full_response_accumulator[0], context_text, chunks_id, _active_model_name
+                )
         except Exception as e:
             print(f"Error de auditoría: {e}")
 
@@ -261,15 +273,13 @@ async def check_document_hash(document_hash: str):
     Utilizado por el pipeline de ingesta de n8n para deduplicación.
     Usa conexión de superusuario para bypass de RLS en consulta administrativa interna.
     """
-    conn = await get_db_connection_admin()
-    try:
+    async with get_pool_admin().acquire() as conn:
         result = await conn.fetchval(
             "SELECT COUNT(*) FROM document_sections WHERE document_hash = $1",
             document_hash
         )
-        return {"exists": result > 0, "hash": document_hash}
-    finally:
-        await conn.close()
+    return {"exists": result > 0, "hash": document_hash}
+
 
 @app.delete("/api/v1/document/{filename}")
 async def delete_document_chunks(filename: str, token_data: dict = Depends(verify_jwt_token)):
@@ -280,21 +290,19 @@ async def delete_document_chunks(filename: str, token_data: dict = Depends(verif
     """
     if token_data.get("role") != "admin":
         raise HTTPException(status_code=403, detail="Operación restringida al rol admin")
-    
-    conn = await get_db_connection()
-    try:
+
+    async with get_pool().acquire() as conn:
         await conn.execute(
             "DELETE FROM document_sections WHERE filename = $1",
             filename
         )
-        return {"deleted": True, "filename": filename}
-    finally:
-        await conn.close()
+    return {"deleted": True, "filename": filename}
 
 
 # ─── RAG CONFIG ───────────────────────────────
 from pydantic import BaseModel as _BaseModel
 from typing import Optional as _Optional
+
 
 class ConfigUpdate(_BaseModel):
     top_k: _Optional[int] = None
@@ -306,30 +314,27 @@ class ConfigUpdate(_BaseModel):
     num_ctx: _Optional[int] = None
     num_predict: _Optional[int] = None
 
+
 @app.get("/api/v1/config")
 async def get_config(payload: dict = Depends(verify_jwt_token)):
-    conn = await get_db_connection_admin()
-    try:
+    async with get_pool_admin().acquire() as conn:
         rows = await conn.fetch(
             "SELECT key, value, updated_by, updated_at FROM rag_config ORDER BY key"
         )
-        return {
-            r["key"]: {
-                "value": r["value"],
-                "updated_by": r["updated_by"],
-                "updated_at": str(r["updated_at"])
-            } for r in rows
-        }
-    finally:
-        await conn.close()
+    return {
+        r["key"]: {
+            "value": r["value"],
+            "updated_by": r["updated_by"],
+            "updated_at": str(r["updated_at"])
+        } for r in rows
+    }
+
 
 @app.put("/api/v1/config")
 async def update_config(updates: ConfigUpdate, payload: dict = Depends(verify_jwt_token)):
-    from fastapi import HTTPException as _HTTPException
     if payload.get("role") != "admin":
-        raise _HTTPException(status_code=403, detail="Solo administradores pueden modificar la configuracion")
-    conn = await get_db_connection_admin()
-    try:
+        raise HTTPException(status_code=403, detail="Solo administradores pueden modificar la configuracion")
+    async with get_pool_admin().acquire() as conn:
         changed = {}
         data = updates.model_dump(exclude_none=True)
         for key, val in data.items():
@@ -338,9 +343,9 @@ async def update_config(updates: ConfigUpdate, payload: dict = Depends(verify_jw
                 str(val), payload.get("sub", "admin"), key
             )
             changed[key] = str(val)
-        return {"status": "ok", "updated": changed}
-    finally:
-        await conn.close()
+    # Invalidar caché tras actualización
+    await invalidate_config_cache()
+    return {"status": "ok", "updated": changed}
 
 
 # ─── RF-C07: GESTIÓN DE USUARIOS Y ROLES ──────────────
@@ -348,20 +353,24 @@ from typing import Optional as _Opt
 
 VALID_ROLES = {"admin", "dept_high", "dept_standard"}
 
+
 class UserCreate(_BaseModel):
     username: str
     password: str
     department: str
     user_role: str
 
+
 class UserUpdate(_BaseModel):
     password: _Opt[str] = None
     department: _Opt[str] = None
     user_role: _Opt[str] = None
 
+
 def _require_admin(payload: dict):
     if payload.get("role") != "admin":
         raise HTTPException(status_code=403, detail="Operación restringida al rol admin")
+
 
 @app.post("/api/v1/admin/users", status_code=201)
 async def create_user(user: UserCreate, payload: dict = Depends(verify_jwt_token)):
@@ -369,8 +378,7 @@ async def create_user(user: UserCreate, payload: dict = Depends(verify_jwt_token
     _require_admin(payload)
     if user.user_role not in VALID_ROLES:
         raise HTTPException(status_code=422, detail=f"Rol inválido. Válidos: {', '.join(VALID_ROLES)}")
-    conn = await get_db_connection_admin()
-    try:
+    async with get_pool_admin().acquire() as conn:
         existing = await conn.fetchval("SELECT user_id FROM users WHERE username = $1", user.username)
         if existing:
             raise HTTPException(status_code=409, detail="El usuario ya existe")
@@ -379,28 +387,25 @@ async def create_user(user: UserCreate, payload: dict = Depends(verify_jwt_token
                VALUES ($1, crypt($2, gen_salt('bf', 12)), $3, $4)""",
             user.username, user.password, user.department, user.user_role
         )
-        return {"status": "created", "username": user.username,
-                "department": user.department, "user_role": user.user_role}
-    finally:
-        await conn.close()
+    return {"status": "created", "username": user.username,
+            "department": user.department, "user_role": user.user_role}
+
 
 @app.get("/api/v1/admin/users")
 async def list_users(payload: dict = Depends(verify_jwt_token)):
     """Lista los usuarios existentes sin exponer los hashes de contraseña. Solo admin."""
     _require_admin(payload)
-    conn = await get_db_connection_admin()
-    try:
+    async with get_pool_admin().acquire() as conn:
         rows = await conn.fetch(
             "SELECT user_id, username, department, user_role, created_at FROM users ORDER BY user_id"
         )
-        return [
-            {"user_id": r["user_id"], "username": r["username"],
-             "department": r["department"], "user_role": r["user_role"],
-             "created_at": str(r["created_at"])}
-            for r in rows
-        ]
-    finally:
-        await conn.close()
+    return [
+        {"user_id": r["user_id"], "username": r["username"],
+         "department": r["department"], "user_role": r["user_role"],
+         "created_at": str(r["created_at"])}
+        for r in rows
+    ]
+
 
 @app.put("/api/v1/admin/users/{username}")
 async def update_user(username: str, updates: UserUpdate, payload: dict = Depends(verify_jwt_token)):
@@ -408,8 +413,7 @@ async def update_user(username: str, updates: UserUpdate, payload: dict = Depend
     _require_admin(payload)
     if updates.user_role is not None and updates.user_role not in VALID_ROLES:
         raise HTTPException(status_code=422, detail=f"Rol inválido. Válidos: {', '.join(VALID_ROLES)}")
-    conn = await get_db_connection_admin()
-    try:
+    async with get_pool_admin().acquire() as conn:
         existing = await conn.fetchval("SELECT user_id FROM users WHERE username = $1", username)
         if not existing:
             raise HTTPException(status_code=404, detail="Usuario no encontrado")
@@ -432,9 +436,8 @@ async def update_user(username: str, updates: UserUpdate, payload: dict = Depend
                 updates.user_role, username
             )
             changed["user_role"] = updates.user_role
-        return {"status": "updated", "username": username, "changed": changed}
-    finally:
-        await conn.close()
+    return {"status": "updated", "username": username, "changed": changed}
+
 
 @app.delete("/api/v1/admin/users/{username}")
 async def delete_user(username: str, payload: dict = Depends(verify_jwt_token)):
@@ -442,12 +445,9 @@ async def delete_user(username: str, payload: dict = Depends(verify_jwt_token)):
     _require_admin(payload)
     if payload.get("sub") == username:
         raise HTTPException(status_code=400, detail="No puedes eliminar tu propio usuario")
-    conn = await get_db_connection_admin()
-    try:
+    async with get_pool_admin().acquire() as conn:
         existing = await conn.fetchval("SELECT user_id FROM users WHERE username = $1", username)
         if not existing:
             raise HTTPException(status_code=404, detail="Usuario no encontrado")
         await conn.execute("DELETE FROM users WHERE username = $1", username)
-        return {"status": "deleted", "username": username}
-    finally:
-        await conn.close()
+    return {"status": "deleted", "username": username}

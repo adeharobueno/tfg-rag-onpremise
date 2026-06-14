@@ -68,7 +68,8 @@ def jwt_expired():
 
 
 @pytest.fixture
-def client():
-    """Cliente HTTP asíncrono para tests contra FastAPI."""
+async def client():
+    """Cliente HTTP asíncrono para tests contra FastAPI (con lifespan)."""
     transport = ASGITransport(app=app)
-    return AsyncClient(transport=transport, base_url="http://test")
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
+        yield ac

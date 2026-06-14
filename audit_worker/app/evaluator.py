@@ -244,4 +244,4 @@ if __name__ == "__main__":
     print("=" * 60)
     while True:
         asyncio.run(evaluate_pending_logs())
-        time.sleep(30)
+        time.sleep(60)

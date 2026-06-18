@@ -8,7 +8,7 @@ import pytest
 import json
 import numpy as np
 from datetime import datetime, timezone
-from app.database import get_db_connection, get_db_connection_admin
+from app.database import get_pool, get_pool_admin
 import asyncpg
 
 
@@ -28,20 +28,16 @@ async def get_test_embedding(prompt="test seguridad"):
 @pytest.mark.asyncio
 async def test_audit_logs_immutable_no_delete():
     """RNF-N02: El rol api_gateway NO puede ejecutar DELETE sobre audit_logs."""
-    conn = await get_db_connection()  # conexión como api_gateway
-    try:
+    async with get_pool().acquire() as conn: # conexión como api_gateway
         # Intentar DELETE debe lanzar excepción de permisos insuficientes
         with pytest.raises(asyncpg.exceptions.InsufficientPrivilegeError):
             await conn.execute("DELETE FROM audit_logs WHERE log_id = -1")
-    finally:
-        await conn.close()
 
 
 @pytest.mark.asyncio
 async def test_audit_logs_allows_insert_and_update():
     """RNF-N02: api_gateway SÍ puede INSERT y UPDATE sobre audit_logs (solo DELETE está vetado)."""
-    conn = await get_db_connection()
-    try:
+    async with get_pool().acquire() as conn:
         # INSERT permitido
         await conn.execute("""
             INSERT INTO audit_logs (user_department, user_role, question, response,
@@ -59,12 +55,10 @@ async def test_audit_logs_allows_insert_and_update():
             "SELECT requires_review FROM audit_logs WHERE log_id = $1", log_id
         )
         assert val is True
-    finally:
-        await conn.close()
-        # Limpieza con superusuario (sí puede DELETE)
-        admin = await get_db_connection_admin()
+        
+    # Limpieza con superusuario (sí puede DELETE)
+    async with get_pool_admin().acquire() as admin:
         await admin.execute("DELETE FROM audit_logs WHERE user_department = 'TEST_DEPT'")
-        await admin.close()
 
 
 # ── POLÍTICA RESTRICTIVE A NIVEL DE MOTOR (RNF-S06) ─────
@@ -74,40 +68,38 @@ async def test_expired_blocked_at_engine_level():
     """RNF-S06: La política RESTRICTIVE bloquea documentos expirados incluso con SELECT directo."""
     test_hash = "testexpiry000000000000000000000000000000000000000000000000expir"
     emb = await get_test_embedding()
-    admin = await get_db_connection_admin()
-    await admin.execute("DELETE FROM document_sections WHERE document_hash = $1", test_hash)
-    expired_dt = datetime(2020, 1, 1, tzinfo=timezone.utc)
-    meta = json.dumps({
-        "file_name": "expired.txt",
-        "department": "Administración",
-        "confidentiality_level": "Público",
-        "valid_until": expired_dt.isoformat(),
-        "document_hash": test_hash
-    })
-    await admin.execute("""
-        INSERT INTO document_sections (text, metadata, embedding, department,
-            confidentiality_level, valid_until, document_hash)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-    """, "Documento expirado nivel motor", meta, emb, "Administración",
-        "Público", expired_dt, test_hash)
-    await admin.close()
+    
+    async with get_pool_admin().acquire() as admin:
+        await admin.execute("DELETE FROM document_sections WHERE document_hash = $1", test_hash)
+        expired_dt = datetime(2020, 1, 1, tzinfo=timezone.utc)
+        meta = json.dumps({
+            "file_name": "expired.txt",
+            "department": "Administración",
+            "confidentiality_level": "Público",
+            "valid_until": expired_dt.isoformat(),
+            "document_hash": test_hash
+        })
+        await admin.execute("""
+            INSERT INTO document_sections (text, metadata, embedding, department,
+                confidentiality_level, valid_until, document_hash)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
+        """, "Documento expirado nivel motor", meta, emb, "Administración",
+            "Público", expired_dt, test_hash)
 
     try:
         # Incluso con admin y SELECT directo filtrando por hash, RLS RESTRICTIVE bloquea
-        conn = await get_db_connection()
-        async with conn.transaction():
-            await conn.execute("SELECT set_config('app.current_user_dept', 'Administración', true);")
-            await conn.execute("SELECT set_config('app.current_user_role', 'admin', true);")
-            rows = await conn.fetch(
-                "SELECT text FROM document_sections WHERE document_hash = $1", test_hash
-            )
-        await conn.close()
+        async with get_pool().acquire() as conn:
+            async with conn.transaction():
+                await conn.execute("SELECT set_config('app.current_user_dept', 'Administración', true);")
+                await conn.execute("SELECT set_config('app.current_user_role', 'admin', true);")
+                rows = await conn.fetch(
+                    "SELECT text FROM document_sections WHERE document_hash = $1", test_hash
+                )
         assert len(rows) == 0, \
             f"FUGA CRÍTICA: documento expirado visible a nivel de motor: {[dict(r) for r in rows]}"
     finally:
-        admin = await get_db_connection_admin()
-        await admin.execute("DELETE FROM document_sections WHERE document_hash = $1", test_hash)
-        await admin.close()
+        async with get_pool_admin().acquire() as admin:
+            await admin.execute("DELETE FROM document_sections WHERE document_hash = $1", test_hash)
 
 
 # ── DENEGACIÓN RLS_EMPTY (RF-D05) ───────────────────────
@@ -116,11 +108,10 @@ async def test_expired_blocked_at_engine_level():
 async def test_rls_empty_denial_logged(client, jwt_dept_standard_admin):
     """RF-D05: Cuando RLS filtra todos los resultados, se registra denegación rls_empty."""
     # Contar denegaciones rls_empty antes
-    conn = await get_db_connection_admin()
-    count_before = await conn.fetchval(
-        "SELECT COUNT(*) FROM rbac_denials WHERE denial_reason = 'rls_empty'"
-    )
-    await conn.close()
+    async with get_pool_admin().acquire() as conn:
+        count_before = await conn.fetchval(
+            "SELECT COUNT(*) FROM rbac_denials WHERE denial_reason = 'rls_empty'"
+        )
 
     # Un dept_standard de Administración pregunta por algo que no existe en su alcance.
     # Usamos una consulta muy específica para maximizar probabilidad de 0 resultados accesibles.
@@ -132,11 +123,10 @@ async def test_rls_empty_denial_logged(client, jwt_dept_standard_admin):
     import asyncio
     await asyncio.sleep(1)
 
-    conn = await get_db_connection_admin()
-    count_after = await conn.fetchval(
-        "SELECT COUNT(*) FROM rbac_denials WHERE denial_reason = 'rls_empty'"
-    )
-    await conn.close()
+    async with get_pool_admin().acquire() as conn:
+        count_after = await conn.fetchval(
+            "SELECT COUNT(*) FROM rbac_denials WHERE denial_reason = 'rls_empty'"
+        )
 
     # Nota: este test depende de que la búsqueda no devuelva chunks accesibles.
     # Si el corpus tiene documentos públicos de Administración muy genéricos, podría

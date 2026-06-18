@@ -1,0 +1,53 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.15, pytest-8.1.1, pluggy-1.6.0 -- /usr/local/bin/python
+cachedir: .pytest_cache
+rootdir: /app/tests
+configfile: pytest.ini
+plugins: anyio-4.13.0, asyncio-0.23.5
+asyncio: mode=Mode.AUTO
+collecting ... collected 42 items
+
+tests/test_auth.py::test_login_valid_credentials PASSED                  [  2%]
+tests/test_auth.py::test_login_invalid_password PASSED                   [  4%]
+tests/test_auth.py::test_login_nonexistent_user PASSED                   [  7%]
+tests/test_auth.py::test_expired_token_rejected PASSED                   [  9%]
+tests/test_auth.py::test_invalid_token_rejected PASSED                   [ 11%]
+tests/test_auth.py::test_missing_token_rejected PASSED                   [ 14%]
+tests/test_rag_flow.py::test_rag_flow_success PASSED                     [ 16%]
+tests/test_rag_flow.py::test_deduplication_exists_true PASSED            [ 19%]
+tests/test_rag_flow.py::test_deduplication_exists_false PASSED           [ 21%]
+tests/test_rag_flow.py::test_audit_log_created PASSED                    [ 23%]
+tests/test_rag_flow.py::test_trigger_sync_metadata PASSED                [ 26%]
+tests/test_rag_flow.py::test_config_dynamic_update PASSED                [ 28%]
+tests/test_rbac.py::test_admin_delete_allowed PASSED                     [ 30%]
+tests/test_rbac.py::test_dept_standard_delete_forbidden PASSED           [ 33%]
+tests/test_rbac.py::test_dept_high_delete_forbidden PASSED               [ 35%]
+tests/test_rbac.py::test_config_get_all_roles PASSED                     [ 38%]
+tests/test_rbac.py::test_config_put_admin_only PASSED                    [ 40%]
+tests/test_rbac.py::test_document_exists_public PASSED                   [ 42%]
+tests/test_rls_security.py::test_rls_dept_isolation PASSED               [ 45%]
+tests/test_rls_security.py::test_rls_confidentiality_levels PASSED       [ 47%]
+tests/test_rls_security.py::test_rls_expired_documents_blocked PASSED    [ 50%]
+tests/test_rls_security.py::test_rls_admin_sees_all_departments PASSED   [ 52%]
+tests/test_security_guarantees.py::test_audit_logs_immutable_no_delete PASSED [ 54%]
+tests/test_security_guarantees.py::test_audit_logs_allows_insert_and_update PASSED [ 57%]
+tests/test_security_guarantees.py::test_expired_blocked_at_engine_level PASSED [ 59%]
+tests/test_security_guarantees.py::test_rls_empty_denial_logged PASSED   [ 61%]
+tests/test_security_guarantees.py::test_chat_missing_question_field PASSED [ 64%]
+tests/test_security_guarantees.py::test_chat_malformed_json PASSED       [ 66%]
+tests/test_security_guarantees.py::test_auth_missing_password PASSED     [ 69%]
+tests/test_security_guarantees.py::test_config_put_invalid_type PASSED   [ 71%]
+tests/test_user_management.py::test_create_user_admin PASSED             [ 73%]
+tests/test_user_management.py::test_create_user_then_login PASSED        [ 76%]
+tests/test_user_management.py::test_create_user_forbidden_non_admin PASSED [ 78%]
+tests/test_user_management.py::test_create_user_invalid_role PASSED      [ 80%]
+tests/test_user_management.py::test_create_duplicate_user PASSED         [ 83%]
+tests/test_user_management.py::test_list_users_admin PASSED              [ 85%]
+tests/test_user_management.py::test_list_users_forbidden_non_admin PASSED [ 88%]
+tests/test_user_management.py::test_update_user_role PASSED              [ 90%]
+tests/test_user_management.py::test_update_user_password_then_login PASSED [ 92%]
+tests/test_user_management.py::test_update_nonexistent_user PASSED       [ 95%]
+tests/test_user_management.py::test_delete_user PASSED                   [ 97%]
+tests/test_user_management.py::test_delete_self_forbidden PASSED         [100%]
+
+======================== 42 passed in 71.22s (0:01:11) =========================

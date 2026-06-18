@@ -3,16 +3,15 @@ Tests de gestión de usuarios y roles (RF-C07).
 Verifica los endpoints CRUD de usuarios, restringidos al rol admin.
 """
 import pytest
-from app.database import get_db_connection_admin
+from app.database import get_pool_admin
 
 
 TEST_USERNAME = "test_user_crud"
 
 
 async def cleanup_test_user():
-    conn = await get_db_connection_admin()
-    await conn.execute("DELETE FROM users WHERE username = $1", TEST_USERNAME)
-    await conn.close()
+    async with get_pool_admin().acquire() as conn:
+        await conn.execute("DELETE FROM users WHERE username = $1", TEST_USERNAME)
 
 
 @pytest.mark.asyncio

@@ -10,7 +10,7 @@ import pytest
 import json
 import numpy as np
 from datetime import datetime, timezone
-from app.database import get_db_connection, get_db_connection_admin
+from app.database import get_pool, get_pool_admin
 import requests
 
 
@@ -27,45 +27,43 @@ async def get_test_embedding():
 
 async def setup_test_data(embedding):
     """Inserta datos de prueba con departamentos y niveles de test."""
-    conn = await get_db_connection_admin()
-    await conn.execute(
-        "DELETE FROM document_sections WHERE department IN ('TEST_RRHH', 'TEST_ADM')"
-    )
-    emb_np = np.array(embedding, dtype=np.float32)
-    expired_dt = datetime(2020, 1, 1, tzinfo=timezone.utc)
+    async with get_pool_admin().acquire() as conn:
+        await conn.execute(
+            "DELETE FROM document_sections WHERE department IN ('TEST_RRHH', 'TEST_ADM')"
+        )
+        emb_np = np.array(embedding, dtype=np.float32)
+        expired_dt = datetime(2020, 1, 1, tzinfo=timezone.utc)
 
-    test_docs = [
-        ("Protocolo confidencial de despidos TEST", "TEST_RRHH", "Confidencial", None),
-        ("Manual público de bienvenida TEST", "TEST_RRHH", "Público", None),
-        ("Documento interno RRHH TEST", "TEST_RRHH", "Interno", None),
-        ("Presupuesto interno TEST administración", "TEST_ADM", "Interno", None),
-        ("Guía pública TEST administración", "TEST_ADM", "Público", None),
-        ("Documento expirado TEST", "TEST_ADM", "Público", expired_dt),
-    ]
-    for text, dept, level, exp in test_docs:
-        meta = json.dumps({
-            "file_name": f"test_{dept}_{level}.txt",
-            "department": dept,
-            "confidentiality_level": level,
-            "valid_until": exp.isoformat() if exp else None,
-            "document_hash": "test_" + dept + "_" + level
-        })
-        await conn.execute("""
-            INSERT INTO document_sections (text, metadata, embedding, department,
-                confidentiality_level, valid_until, document_hash)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
-        """, text, meta, emb_np, dept, level,
-            exp if exp else None, "test_" + dept + "_" + level)
-    await conn.close()
+        test_docs = [
+            ("Protocolo confidencial de despidos TEST", "TEST_RRHH", "Confidencial", None),
+            ("Manual público de bienvenida TEST", "TEST_RRHH", "Público", None),
+            ("Documento interno RRHH TEST", "TEST_RRHH", "Interno", None),
+            ("Presupuesto interno TEST administración", "TEST_ADM", "Interno", None),
+            ("Guía pública TEST administración", "TEST_ADM", "Público", None),
+            ("Documento expirado TEST", "TEST_ADM", "Público", expired_dt),
+        ]
+        for text, dept, level, exp in test_docs:
+            meta = json.dumps({
+                "file_name": f"test_{dept}_{level}.txt",
+                "department": dept,
+                "confidentiality_level": level,
+                "valid_until": exp.isoformat() if exp else None,
+                "document_hash": "test_" + dept + "_" + level
+            })
+            await conn.execute("""
+                INSERT INTO document_sections (text, metadata, embedding, department,
+                    confidentiality_level, valid_until, document_hash)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
+            """, text, meta, emb_np, dept, level,
+                exp if exp else None, "test_" + dept + "_" + level)
 
 
 async def cleanup_test_data():
     """Elimina datos de prueba."""
-    conn = await get_db_connection_admin()
-    await conn.execute(
-        "DELETE FROM document_sections WHERE department IN ('TEST_RRHH', 'TEST_ADM')"
-    )
-    await conn.close()
+    async with get_pool_admin().acquire() as conn:
+        await conn.execute(
+            "DELETE FROM document_sections WHERE department IN ('TEST_RRHH', 'TEST_ADM')"
+        )
 
 
 async def query_rls_as_role(dept, role):
@@ -74,8 +72,7 @@ async def query_rls_as_role(dept, role):
     filtrando solo los datos de test. Evita la búsqueda vectorial para no competir
     con el corpus real en el ranking de distancia.
     """
-    conn = await get_db_connection()
-    try:
+    async with get_pool().acquire() as conn:
         async with conn.transaction():
             await conn.execute("SELECT set_config('app.current_user_dept', $1, true);", dept)
             await conn.execute("SELECT set_config('app.current_user_role', $1, true);", role)
@@ -86,8 +83,6 @@ async def query_rls_as_role(dept, role):
                 ORDER BY department, confidentiality_level
             """)
         return [dict(r) for r in rows]
-    finally:
-        await conn.close()
 
 
 # ── TESTS ──────────────────────────────────────────────

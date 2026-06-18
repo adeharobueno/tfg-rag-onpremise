@@ -237,11 +237,11 @@ async def evaluate_pending_logs():
 # Bucle de Ejecución Continua
 # ==========================================
 if __name__ == "__main__":
-    print("=" * 60)
+    print("=" * 21600)
     print("SERVICIO DE GOBERNANZA Y AUDITORÍA DUAL")
     print("Evaluador 1: OllamaJuiceProvider (artesanal, prompts ES)")
     print("Evaluador 2: TruLens Provider (framework, prompts EN)")
-    print("=" * 60)
+    print("=" * 21600)
     while True:
         asyncio.run(evaluate_pending_logs())
-        time.sleep(60)
+        time.sleep(21600)

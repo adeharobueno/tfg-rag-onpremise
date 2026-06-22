@@ -1,0 +1,562 @@
+openapi: 3.1.0
+
+info:
+  title: RAG API Gateway
+  version: 1.0.0
+  summary: Capa de intermediación segura para un sistema RAG on-premise.
+  description: |
+    API Gateway que orquesta las peticiones del frontend (Streamlit), verifica
+    identidades, interactúa con el motor LLM (Ollama) y recupera bloques
+    semánticos desde PostgreSQL (pgvector), sin acoplar el cliente final con el
+    motor vectorial.
+
+    ## Arquitectura de seguridad
+    - **Autenticación**: JWT auto-contenidos (HS256), sin estado de sesión en la API.
+    - **Autorización**: RBAC sobre los claims `role` / `department` del token.
+    - **Aislamiento de datos**: la recuperación vectorial se filtra mediante
+      PostgreSQL Row-Level Security (RLS). La identidad del usuario se propaga a
+      la sesión de base de datos vía GUC (`set_config`), nunca con cláusulas
+      `WHERE department = X` en el código.
+    - **Doble pool de conexiones** (`asyncpg`): un pool estándar sujeto a RLS y un
+      pool administrativo (superusuario) que hace bypass, restringido a funciones
+      atómicas internas (login, deduplicación n8n, lectura de configuración).
+    - **Auditoría perimetral**: el middleware `RBACDenialMiddleware` intercepta
+      todo 401/403 y lo persiste en `rbac_denials` (OWASP Logging & Monitoring).
+
+    ## Convenciones
+    - Los errores siguen un esquema uniforme (`Error`).
+    - El endpoint de chat responde mediante **Server-Sent Events (SSE)**.
+  contact:
+    name: Equipo de Plataforma RAG
+  license:
+    name: Propietario
+
+servers:
+  - url: http://api_gateway:8000
+    description: Servicio interno (red Docker on-premise)
+  - url: http://localhost:8000
+    description: Desarrollo local
+
+tags:
+  - name: Autenticación
+    description: Emisión y validación de JWT.
+  - name: Chat RAG
+    description: Flujo principal de recuperación aumentada y generación en streaming.
+  - name: Administración - Usuarios
+    description: CRUD de usuarios (requiere rol admin).
+  - name: Administración - Configuración
+    description: Hot-reload de hiperparámetros RAG (requiere rol admin).
+  - name: Ingesta (n8n)
+    description: Endpoints consumidos por el orquestador ETL para deduplicación y borrado.
+
+paths:
+
+  /auth/token:
+    post:
+      tags: [Autenticación]
+      summary: Login y emisión de JWT
+      description: |
+        Verifica credenciales contra la tabla `users` usando la función nativa
+        `crypt()` de PostgreSQL (vía pool administrativo). Si son válidas, emite
+        un JWT HS256 con 60 minutos de vida que incrusta los claims `sub`,
+        `department` y `role`.
+      operationId: login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Autenticación correcta.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /api/v1/chat/stream:
+    post:
+      tags: [Chat RAG]
+      summary: Consulta RAG con respuesta en streaming (SSE)
+      description: |
+        Orquestador primario del flujo RAG:
+        1. Vectoriza la pregunta con Ollama (`nomic-embed-text`) vía `httpx` asíncrono.
+        2. Recupera contexto con `search_vectors_with_rls()` (pool estándar + RLS + GUC).
+        3. Control de fugas: si el resultado vectorial viene vacío (RLS o nula
+           similitud) devuelve error inmediato y registra el flag `rls_empty`.
+        4. Ensambla el contexto en sintaxis XML indicando la procedencia del documento.
+        5. Genera la respuesta token a token contra `ollama_engine:11434/api/chat`
+           y la reenvía como eventos SSE.
+        6. Audita la traza en `audit_logs` mediante `BackgroundTasks` tras el
+           último byte, sin retener la red del usuario.
+      operationId: chatStream
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: |
+            Flujo SSE. Cada evento `message` transporta un token; el flujo
+            termina con un evento `done`. Content-Type `text/event-stream`.
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                description: Secuencia de eventos SSE.
+              examples:
+                stream:
+                  summary: Ejemplo de flujo SSE
+                  value: |
+                    event: message
+                    data: {"token": "La"}
+
+                    event: message
+                    data: {"token": " política"}
+
+                    event: done
+                    data: {"sources": ["RRHH/manual.pdf"]}
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Sin contexto recuperable (RLS vacío o nula similitud). Flag `rls_empty`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+        - bearerAuth: []
+
+  /api/v1/admin/users:
+    get:
+      tags: [Administración - Usuarios]
+      summary: Listar usuarios
+      operationId: listUsers
+      responses:
+        '200':
+          description: Lista de usuarios.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      security:
+        - bearerAuth: []
+    post:
+      tags: [Administración - Usuarios]
+      summary: Crear usuario
+      description: |
+        Inyecta internamente la salt de bcrypt `gen_salt('bf', 12)` para proteger
+        frente a ataques de diccionario.
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '201':
+          description: Usuario creado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          description: El usuario ya existe.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+        - bearerAuth: []
+
+  /api/v1/admin/users/{username}:
+    parameters:
+      - $ref: '#/components/parameters/Username'
+    put:
+      tags: [Administración - Usuarios]
+      summary: Actualizar usuario
+      operationId: updateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+      responses:
+        '200':
+          description: Usuario actualizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+        - bearerAuth: []
+    delete:
+      tags: [Administración - Usuarios]
+      summary: Eliminar usuario
+      description: Bloquea la auto-eliminación por seguridad.
+      operationId: deleteUser
+      responses:
+        '204':
+          description: Usuario eliminado.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Prohibido (rol insuficiente o intento de auto-eliminación).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      security:
+        - bearerAuth: []
+
+  /api/v1/config:
+    get:
+      tags: [Administración - Configuración]
+      summary: Leer configuración RAG
+      description: |
+        Lee hiperparámetros desde `rag_config`. Emplea una caché interna con TTL
+        de 30 s (`_config_cache`) para evitar una conexión a BD por petición.
+      operationId: getConfig
+      responses:
+        '200':
+          description: Configuración vigente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RagConfig'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      security:
+        - bearerAuth: []
+    put:
+      tags: [Administración - Configuración]
+      summary: Actualizar configuración RAG (hot-reload)
+      description: |
+        Modifica hiperparámetros (`temperature`, `top_k`, modelo activo, etc.) y
+        registra qué administrador emitió el cambio. Invalida inmediatamente la
+        caché mediante `invalidate_config_cache()` para garantizar coherencia.
+      operationId: updateConfig
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RagConfigUpdate'
+      responses:
+        '200':
+          description: Configuración actualizada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RagConfig'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+        - bearerAuth: []
+
+  /api/v1/document/exists/{document_hash}:
+    parameters:
+      - name: document_hash
+        in: path
+        required: true
+        description: Hash SHA-256 del documento.
+        schema:
+          type: string
+          pattern: '^[a-f0-9]{64}$'
+    get:
+      tags: [Ingesta (n8n)]
+      summary: Comprobar existencia de documento (deduplicación)
+      description: |
+        Punto de comprobación asíncrono y **desprotegido** (sin JWT) para la
+        deduplicación estricta del pipeline n8n en la fase de hash SHA-256. Usa
+        el pool administrativo para acelerar y omitir los checks de RLS.
+      operationId: documentExists
+      security: []
+      responses:
+        '200':
+          description: Resultado de la comprobación.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentExists'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /api/v1/document/{filename}:
+    parameters:
+      - name: filename
+        in: path
+        required: true
+        description: Nombre lógico del documento.
+        schema:
+          type: string
+    delete:
+      tags: [Ingesta (n8n)]
+      summary: Eliminar documento y sus fragmentos
+      description: Revoca todos los fragmentos asociados a un nombre lógico de documento.
+      operationId: deleteDocument
+      responses:
+        '200':
+          description: Documento y fragmentos eliminados.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteDocumentResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      security:
+        - bearerAuth: []
+
+components:
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        JWT HS256 con vida de 60 min. Claims: `sub`, `department`, `role`, `exp`.
+        Se valida en cada endpoint protegido mediante la dependencia
+        `verify_jwt_token`. Los endpoints de administración añaden la comprobación
+        `_require_admin` sobre el claim `role`.
+
+  parameters:
+    Username:
+      name: username
+      in: path
+      required: true
+      description: Identificador de usuario.
+      schema:
+        type: string
+
+  responses:
+    Unauthorized:
+      description: Token ausente, inválido o expirado. Registrado en `rbac_denials`.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Rol insuficiente. Registrado en `rbac_denials`.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Recurso no encontrado.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: Payload malformado o inválido (validación Pydantic).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorResponse'
+
+  schemas:
+
+    LoginRequest:
+      type: object
+      required: [username, password]
+      properties:
+        username:
+          type: string
+          example: jdoe
+        password:
+          type: string
+          format: password
+          example: 'S3cr3t!'
+
+    TokenResponse:
+      type: object
+      required: [access_token, token_type]
+      properties:
+        access_token:
+          type: string
+          description: JWT HS256.
+        token_type:
+          type: string
+          enum: [bearer]
+          default: bearer
+        expires_in:
+          type: integer
+          description: Segundos de validez.
+          example: 3600
+
+    ChatRequest:
+      type: object
+      required: [question]
+      properties:
+        question:
+          type: string
+          description: Pregunta del usuario en lenguaje natural.
+          example: ¿Cuántos días de vacaciones tengo al año?
+
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+        department:
+          type: string
+          example: RRHH
+        role:
+          type: string
+          enum: [user, admin]
+      required: [username, department, role]
+
+    UserCreate:
+      type: object
+      required: [username, password, department, role]
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          format: password
+        department:
+          type: string
+        role:
+          type: string
+          enum: [user, admin]
+
+    UserUpdate:
+      type: object
+      description: Campos opcionales; solo se actualizan los provistos.
+      properties:
+        password:
+          type: string
+          format: password
+        department:
+          type: string
+        role:
+          type: string
+          enum: [user, admin]
+
+    RagConfig:
+      type: object
+      properties:
+        model:
+          type: string
+          example: llama3.1:8b
+        temperature:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 2
+          example: 0.2
+        top_k:
+          type: integer
+          minimum: 1
+          example: 5
+        updated_by:
+          type: string
+          description: Administrador que emitió el último cambio.
+        updated_at:
+          type: string
+          format: date-time
+
+    RagConfigUpdate:
+      type: object
+      description: Campos opcionales; solo se actualizan los provistos.
+      properties:
+        model:
+          type: string
+          example: mistral:7b
+        temperature:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 2
+        top_k:
+          type: integer
+          minimum: 1
+
+    DocumentExists:
+      type: object
+      required: [exists]
+      properties:
+        exists:
+          type: boolean
+        document_hash:
+          type: string
+
+    DeleteDocumentResponse:
+      type: object
+      properties:
+        filename:
+          type: string
+        deleted_chunks:
+          type: integer
+          description: Número de fragmentos revocados.
+
+    Error:
+      type: object
+      required: [detail]
+      properties:
+        detail:
+          type: string
+          description: Mensaje legible del error.
+
+    ValidationErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: array
+          items:
+            type: object
+            properties:
+              loc:
+                type: array
+                items:
+                  type: string
+              msg:
+                type: string
+              type:
+                type: string

@@ -45,6 +45,8 @@ services:
       - ${LOCAL_OLLAMA_DIR}/ollama_models:/root/.ollama
     environment:
       - OLLAMA_NUM_PARALLEL=2  # Permite procesar consultas en paralelo aprovechando los hilos del Xeon
+      - OLLAMA_KEEP_ALIVE=-1  #Mantiene los modelos cargados en RAM
+      - OLLAMA_MAX_LOADED_MODELS=2   #Llama 3.1 + nomic conviven sin expulsarse
     networks:
       - rag_network
 

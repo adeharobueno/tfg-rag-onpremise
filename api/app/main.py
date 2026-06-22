@@ -235,6 +235,7 @@ async def rag_chat_stream(request: QueryRequest, background_tasks: BackgroundTas
             "options": {"temperature": 0.0, "top_p": 0.1, "num_ctx": 4096, "num_predict": 512}
         }
 
+        # ================================
         async with _http_client.stream("POST", ollama_chat_url, json=chat_payload) as response:
             async for line in response.aiter_lines():
                 if line:
